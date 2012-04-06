@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Declare variables
+# githubtest
 VERSION="0.6.6"
 LOCALPATH="/home/nen/data"
 #REMOTEPATH="/home/nen/data/"
