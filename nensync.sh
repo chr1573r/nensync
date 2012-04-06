@@ -72,7 +72,6 @@ gfx ()
 			echo
 			echo
 			echo -e "$GREEN""          nensync version $VERSION"$DEF" - " $BLUE"Nordic Encryption Net"$DEF" (C) "$BLUE"2011-2012"$DEF
-			echo This is a test!
 			sleep 2
 			clear
 			
