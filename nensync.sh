@@ -191,23 +191,24 @@ do
 	PORT=`echo $NODECFG | cut -d: -f2`
 	
 	# If NODE is empty, sync will skip. If PORT is non numerical, we will set it to the default NEN port (14514)
-	#if [ -z "NODE" ]
-	#log_engine NewSubEntry "SYNC ABORTED: Empty or invalid line in node.lst"
-	#		gfx failed
-	#		echo
-	#		gfx subspace "$RED""SYNC ABORTED: Empty or invalid line in node.lst"
-	#		gfx subspace "Please make sure the node $GREEN$NODE$DEF is valid"
-	#		gfx subspace "and that the node.lst is compatible with nensync $VERSION"
-	#		echo	
+	if [ -z "NODE" ]
+	log_engine NewSubEntry "SYNC ABORTED: Empty or invalid line in node.lst"
+			gfx failed
+			echo
+			gfx subspace "$RED""SYNC ABORTED: Empty or invalid line in node.lst"
+			gfx subspace "Please make sure the node $GREEN$NODE$DEF is valid"
+			gfx subspace "and that the node.lst is compatible with nensync $VERSION"
+			echo
+			
+		else
+			gfx header
+			gfx arrow "Starting sync with node $GREEN$NODE$DEF:"
 	
-	gfx header
-	gfx arrow "Starting sync with node $GREEN$NODE$DEF:"
+			log_engine NewEntry "Starting sync with node $NODE"
 	
-	log_engine NewEntry "Starting sync with node $NODE"
-	
-	gfx subarrow "Reading node configuration..."
-	log_engine NewSubEntry "Fetching and checking node configuration via SSH"
-	for i in `ssh -p 14514 nen@$NODE cat node.cfg`; do export "$i"; done 2>/dev/null
+			gfx subarrow "Reading node configuration..."
+			log_engine NewSubEntry "Fetching and checking node configuration via SSH"
+			for i in `ssh -p 14514 nen@$NODE cat node.cfg`; do export "$i"; done 2>/dev/null
 
 # Debug
 #	echo "SPEEDLIMIT:"$SPEEDLIMIT""
@@ -217,46 +218,47 @@ do
 #	echo "PORT: "$PORT""
 #	sleep 10
 	
-	gfx subarrow "Verifying node configuration..."
-		if [ -z "$REMOTEPATH" ]; then 	# -n tests to see if the argument is non empty
-			log_engine NewSubEntry "SYNC ABORTED: Remotepath not set in remote node.cfg"
-			gfx failed
-			echo
-			gfx subspace "$RED""SYNC ABORTED:$DEF Remote directory not set, aborting"
-			gfx subspace "Please make sure the node $GREEN$NODE$DEF is valid"
-			gfx subspace "and that the node is compatible with nensync $VERSION"
-			echo	
+			gfx subarrow "Verifying node configuration..."
+			if [ -z "$REMOTEPATH" ]; then 	# -n tests to see if the argument is non empty
+					log_engine NewSubEntry "SYNC ABORTED: Remotepath not set in remote node.cfg"
+					gfx failed
+					echo
+					gfx subspace "$RED""SYNC ABORTED:$DEF Remote directory not set, aborting"
+					gfx subspace "Please make sure the node $GREEN$NODE$DEF is valid"
+					gfx subspace "and that the node is compatible with nensync $VERSION"
+					echo	
 			
-		else 
-				case "$ENABLED" in
+				else 
+					case "$ENABLED" in
 
-					N)
-						gfx subarrow "$RED""SYNC ABORTED:$DEF Node online, but is not configured to allow sync."
-						log_engine NewSubEntry "SYNC ABORTED: Node online, but is configured to not accept incoming connections."
-						;;
-					*)
-						log_engine NewSubEntry "Displaying MOTD"
-						gfx subarrow "Displaying message from node"
-						ssh -p 14514 nen@$NODE cat motd.txt 2>/dev/null
+						N)
+							gfx subarrow "$RED""SYNC ABORTED:$DEF Node online, but is not configured to allow sync."
+							log_engine NewSubEntry "SYNC ABORTED: Node online, but is configured to not accept incoming connections."
+							;;
+						*)
+							log_engine NewSubEntry "Displaying MOTD"
+							gfx subarrow "Displaying message from node"
+							ssh -p 14514 nen@$NODE cat motd.txt 2>/dev/null
+							
+							echo
+							gfx subarrow "Syncing..."
+							log_engine NewSubEntry "Initiating rsync: rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p 14514" $REMOTEUSER@$NODE:$REMOTEPATH $LOCALPATH"
 						
-						echo
-						gfx subarrow "Syncing..."
-						log_engine NewSubEntry "Initiating rsync: rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p 14514" $REMOTEUSER@$NODE:$REMOTEPATH $LOCALPATH"
+							rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p 14514" $REMOTEUSER@$NODE:$REMOTEPATH $LOCALPATH
 						
-						rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p 14514" $REMOTEUSER@$NODE:$REMOTEPATH $LOCALPATH
-						
-						echo
-						gfx arrow "$BLUE""Finished sync with node $NODE.$DEF"
-						gfx line
-						log_engine NewSubEntry "Finished sync with node $NODE."
-						;;
-				esac
-		fi	
+							echo
+							gfx arrow "$BLUE""Finished sync with node $NODE.$DEF"
+							gfx line
+							log_engine NewSubEntry "Finished sync with node $NODE."
+							;;
+					esac
+			fi	
 
-	echo
-	echo Proceeding to next node...
-	sleep 3
-	clear
+		echo
+		echo Proceeding to next node...
+		sleep 3
+		clear
+	fi
 
 
 done
