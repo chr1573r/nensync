@@ -191,7 +191,7 @@ do
 	PORT=`echo $NODECFG | cut -d: -f2`
 	
 	# If NODE is empty, sync will skip. If PORT is non numerical, we will set it to the default NEN port (14514)
-	if [ -z "NODE" ]
+	if [ -z "NODE" ] ; then
 	log_engine NewSubEntry "SYNC ABORTED: Empty or invalid line in node.lst"
 			gfx failed
 			echo
@@ -200,7 +200,7 @@ do
 			gfx subspace "and that the node.lst is compatible with nensync $VERSION"
 			echo
 			
-		else
+	else
 			gfx header
 			gfx arrow "Starting sync with node $GREEN$NODE$DEF:"
 	
@@ -228,31 +228,30 @@ do
 					gfx subspace "and that the node is compatible with nensync $VERSION"
 					echo	
 			
-				else 
-					case "$ENABLED" in
-
+			else 
+				case "$ENABLED" in
 						N)
-							gfx subarrow "$RED""SYNC ABORTED:$DEF Node online, but is not configured to allow sync."
-							log_engine NewSubEntry "SYNC ABORTED: Node online, but is configured to not accept incoming connections."
-							;;
-						*)
-							log_engine NewSubEntry "Displaying MOTD"
-							gfx subarrow "Displaying message from node"
-							ssh -p 14514 nen@$NODE cat motd.txt 2>/dev/null
-							
-							echo
-							gfx subarrow "Syncing..."
-							log_engine NewSubEntry "Initiating rsync: rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p 14514" $REMOTEUSER@$NODE:$REMOTEPATH $LOCALPATH"
+						gfx subarrow "$RED""SYNC ABORTED:$DEF Node online, but is not configured to allow sync."
+						log_engine NewSubEntry "SYNC ABORTED: Node online, but is configured to not accept incoming connections."
+						;;
+					*)
+						log_engine NewSubEntry "Displaying MOTD"
+						gfx subarrow "Displaying message from node"
+						ssh -p 14514 nen@$NODE cat motd.txt 2>/dev/null
 						
-							rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p 14514" $REMOTEUSER@$NODE:$REMOTEPATH $LOCALPATH
-						
-							echo
-							gfx arrow "$BLUE""Finished sync with node $NODE.$DEF"
-							gfx line
-							log_engine NewSubEntry "Finished sync with node $NODE."
-							;;
-					esac
-			fi	
+						echo
+						gfx subarrow "Syncing..."
+						log_engine NewSubEntry "Initiating rsync: rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p 14514" $REMOTEUSER@$NODE:$REMOTEPATH $LOCALPATH"
+					
+						rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p 14514" $REMOTEUSER@$NODE:$REMOTEPATH $LOCALPATH
+					
+						echo
+						gfx arrow "$BLUE""Finished sync with node $NODE.$DEF"
+						gfx line
+						log_engine NewSubEntry "Finished sync with node $NODE."
+						;;
+				esac
+	fi	
 
 		echo
 		echo Proceeding to next node...
