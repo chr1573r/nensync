@@ -188,13 +188,10 @@ gfx arrow "Verifying cfg files..."
 log_engine NewSubEntry "Verifying cfg files..."
 gfx subarrow "node.lst"
 filecheck node.lst
-gfx ok
 gfx subarrow "server.cfg"
 filecheck server.cfg
-gfx ok
 gfx subarrow "client.cfg"
 filecheck client.cfg
-gfx ok
 log_engine NewSubEntry "Files verified!"
 # --- Filecheck finished
 
