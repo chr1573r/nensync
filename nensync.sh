@@ -2,7 +2,7 @@
 
 # Declare variables
 
-VERSION="0.6.7"
+VERSION="0.6.8"
 LOCALPATH="/home/nen/data"
 #REMOTEPATH="/home/nen/data/"
 REMOTEUSER="nen"
@@ -151,31 +151,51 @@ log_engine ()
 	esac
 	}
 
+
+filecheck ()
+{
+	# This function check if the file, param#1, exists or not
+	# If file does not exist, it will display an error message and halt
+	# If file does exist, the nensync continues
+	# Regardless, it will log the outcome
+	# SYNTAX filecheck [FILE]
+	
+		# Checking file
+
+		log_engine NewEntry "Checking if file "$1" exists.."
+		if [ -f $1 ];
+			then
+				log_engine NewSubEntry "File "$1" exists!"
+			else
+				gfx failed
+				log_engine NewSubEntry "FATAL: File "$1" does not found!"
+				echo "FATAL ERROR: Requested file "$1" not found!"
+				echo "NENsync aborted!"
+			exit
+		fi
+
 gfx splash
 log_engine Start
 
 gfx header
-gfx arrow"Initializing Nordic Encrytion Net node sync..."
+gfx arrow "Initializing Nordic Encrytion Net node sync..."
 log_engine NewEntry "Initalizing Nordic Encryption Net node sync"
 
 # --- Filecheck
-# Check if required file "node.lst" exist:
-
-	log_engine NewEntry "Checking if node.lst exists.."
-	gfx subarrow "Checking if node index is present..."
-	if [ -f /home/nen/node.lst ];
-		then
-			gfx ok
-			log_engine NewSubEntry "node.lst found!"
-		else
-			gfx failed
-			log_engine NewSubEntry "node.lst not found!"
-			echo "Node index not found!"
-			echo "NENsync aborted!"
-		exit
-	fi
-
-# --- Filecheck complete
+# We need to make sure necessary files are present
+gfx arrow "Verifying cfg files..."
+log_engine NewSubEntry "Verifying cfg files..."
+gfx subarrow "node.lst"
+filecheck node.lst
+gfx ok
+gfx subarrow "server.cfg"
+filecheck server.cfg
+gfx ok
+gfx subarrow "client.cfg"
+filecheck client.cfg
+gfx ok
+log_engine NewSubEntry "Files verified!"
+# --- Filecheck finished
 
 
 
