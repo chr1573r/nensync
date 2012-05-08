@@ -104,7 +104,7 @@ gfx ()
 }
 
 log_engine ()
-	{
+{
 	# This function aims to provide easy and standarized template-based logging
 	# SYNTAX: log_engine [entrytype] "<text>"
 	# 
@@ -149,7 +149,7 @@ log_engine ()
 				echo "THE LOGENGINE RECIEVED AN UNKNOWN PARAMETER: $1" >>$LOGFILE
 			;;
 	esac
-	}
+}
 
 
 filecheck ()
@@ -173,6 +173,7 @@ filecheck ()
 				echo "NENsync aborted!"
 			exit
 		fi
+}
 
 gfx splash
 log_engine Start
