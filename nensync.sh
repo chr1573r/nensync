@@ -221,7 +221,7 @@ do
 
 	gfx subarrow "Reading node configuration..."
 	log_engine NewSubEntry "Fetching and checking node configuration via SSH"
-	for i in `ssh -p $PORT nen@$NODE cat node.cfg`; do export "$i"; done 2>/dev/null
+	for i in `ssh -p $PORT nen@$NODE cat server.cfg`; do export "$i"; done 2>/dev/null
 
 # Debug
 #	echo "SPEEDLIMIT:"$SPEEDLIMIT""
@@ -233,7 +233,7 @@ do
 	
 		gfx subarrow "Verifying node configuration..."
 		if [ -z "$REMOTEPATH" ]; then 	# -n tests to see if the argument is non empty
-				log_engine NewSubEntry "SYNC ABORTED: Remotepath not set in remote node.cfg"
+				log_engine NewSubEntry "SYNC ABORTED: Remotepath not set in remote server.cfg"
 				gfx failed
 				echo
 				gfx subspace "$RED""SYNC ABORTED:$DEF Remote directory not set, aborting"
