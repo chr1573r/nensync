@@ -254,12 +254,13 @@ do
 					
 					echo
 					gfx subarrow "Syncing..."
+					echo "Sync started `/bin/date`"
 					log_engine NewSubEntry "Initiating rsync: rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $REMOTEUSER@$NODE:$REMOTEPATH $LOCALPATH"
 				
 					rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $REMOTEUSER@$NODE:$REMOTEPATH $LOCALPATH
 				
 					echo
-					gfx arrow "$BLUE""Finished sync with node $NODE.$DEF"
+					gfx arrow "$BLUE""Finished sync with node $NODE.$DEF (`/bin/date`)"
 					gfx line
 					log_engine NewSubEntry "Finished sync with node $NODE."
 					;;
