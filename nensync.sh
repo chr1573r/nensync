@@ -2,7 +2,7 @@
 
 # Declare variables
 
-VERSION="0.6.7"
+VERSION="0.6.8"
 LOCALPATH="/home/nen/data"
 #REMOTEPATH="/home/nen/data/"
 REMOTEUSER="nen"
@@ -104,7 +104,7 @@ gfx ()
 }
 
 log_engine ()
-	{
+{
 	# This function aims to provide easy and standarized template-based logging
 	# SYNTAX: log_engine [entrytype] "<text>"
 	# 
@@ -149,33 +149,51 @@ log_engine ()
 				echo "THE LOGENGINE RECIEVED AN UNKNOWN PARAMETER: $1" >>$LOGFILE
 			;;
 	esac
-	}
+}
+
+
+filecheck ()
+{
+	# This function check if the file, param#1, exists or not
+	# If file does not exist, it will display an error message and halt
+	# If file does exist, the nensync continues
+	# Regardless, it will log the outcome
+	# SYNTAX filecheck [FILE]
+	
+		# Checking file
+
+		log_engine NewEntry "Checking if file "$1" exists.."
+		if [ -f $1 ];
+			then
+				log_engine NewSubEntry "File "$1" exists!"
+			else
+				gfx failed
+				log_engine NewSubEntry "FATAL: File "$1" does not found!"
+				echo "FATAL ERROR: Requested file "$1" not found!"
+				echo "NENsync aborted!"
+			exit
+		fi
+}
 
 gfx splash
 log_engine Start
 
 gfx header
-gfx arrow"Initializing Nordic Encrytion Net node sync..."
+gfx arrow "Initializing Nordic Encrytion Net node sync..."
 log_engine NewEntry "Initalizing Nordic Encryption Net node sync"
 
 # --- Filecheck
-# Check if required file "node.lst" exist:
-
-	log_engine NewEntry "Checking if node.lst exists.."
-	gfx subarrow "Checking if node index is present..."
-	if [ -f /home/nen/node.lst ];
-		then
-			gfx ok
-			log_engine NewSubEntry "node.lst found!"
-		else
-			gfx failed
-			log_engine NewSubEntry "node.lst not found!"
-			echo "Node index not found!"
-			echo "NENsync aborted!"
-		exit
-	fi
-
-# --- Filecheck complete
+# We need to make sure necessary files are present
+gfx arrow "Verifying cfg files..."
+log_engine NewSubEntry "Verifying cfg files..."
+gfx subarrow "node.lst"
+filecheck node.lst
+gfx subarrow "server.cfg"
+filecheck server.cfg
+gfx subarrow "client.cfg"
+filecheck client.cfg
+log_engine NewSubEntry "Files verified!"
+# --- Filecheck finished
 
 
 
@@ -203,7 +221,7 @@ do
 
 	gfx subarrow "Reading node configuration..."
 	log_engine NewSubEntry "Fetching and checking node configuration via SSH"
-	for i in `ssh -p $PORT nen@$NODE cat node.cfg`; do export "$i"; done 2>/dev/null
+	for i in `ssh -p $PORT nen@$NODE cat server.cfg`; do export "$i"; done 2>/dev/null
 
 # Debug
 #	echo "SPEEDLIMIT:"$SPEEDLIMIT""
@@ -215,7 +233,7 @@ do
 	
 		gfx subarrow "Verifying node configuration..."
 		if [ -z "$REMOTEPATH" ]; then 	# -n tests to see if the argument is non empty
-				log_engine NewSubEntry "SYNC ABORTED: Remotepath not set in remote node.cfg"
+				log_engine NewSubEntry "SYNC ABORTED: Remotepath not set in remote server.cfg"
 				gfx failed
 				echo
 				gfx subspace "$RED""SYNC ABORTED:$DEF Remote directory not set, aborting"
@@ -236,12 +254,13 @@ do
 					
 					echo
 					gfx subarrow "Syncing..."
+					echo "Sync started `/bin/date`"
 					log_engine NewSubEntry "Initiating rsync: rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $REMOTEUSER@$NODE:$REMOTEPATH $LOCALPATH"
 				
 					rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $REMOTEUSER@$NODE:$REMOTEPATH $LOCALPATH
 				
 					echo
-					gfx arrow "$BLUE""Finished sync with node $NODE.$DEF"
+					gfx arrow "$BLUE""Finished sync with node $NODE.$DEF (`/bin/date`)"
 					gfx line
 					log_engine NewSubEntry "Finished sync with node $NODE."
 					;;
