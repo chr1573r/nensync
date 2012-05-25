@@ -2,7 +2,7 @@
 
 # Declare variables
 
-VERSION="0.6.8"
+VERSION="0.7.X"
 LOCALPATH="/home/nen/data"
 #REMOTEPATH="/home/nen/data/"
 REMOTEUSER="nen"
@@ -171,17 +171,87 @@ filecheck ()
 				log_engine NewSubEntry "FATAL: File "$1" does not found!"
 				echo "FATAL ERROR: Requested file "$1" not found!"
 				echo "NENsync aborted!"
+				echo "If this is the first time you are running nensync,"
+				echo "please run "nensync.sh --setup" to configure nensync"
 			exit
 		fi
+}
+
+nensetup ()
+{
+	# This function contains an install wizard/setup
+	
+	gfx header
+	gfx arrow "nensync setup wizard"
+	echo "Welcome to the nensync setup wizard."
+	echo "Select the operation you wish to perform:"
+	gfx subarrow "1. Run first time setup"
+	gfx subarrow "2. Adjust nensync configuration"
+	gfx subarrow "3. Display current nensync server/client settings"
+	gfx subarrow "X. Abort nensync setup wizard"
+	echo
+	echo -n "Select one of the options above and press [ENTER]:"
+	read selection
+	
+		case "$selection" in
+		
+			1)
+				gfx header
+				gfx arrow "nensync setup wizard: First time setup"
+				echo (Please note that this setup will overwrite any existing nensync config!)
+				echo
+				gfx subarrow "Checking if required software is installed.."
+				if [ -f /usr/bin/rsync ]
+					then
+						rsync:
+						gfx ok
+					else
+						errorsdetected="yes"
+						gfx failed
+						
+				if [ -f /usr/sbin/sshd ]
+					then
+						sshd:
+						gfx ok
+					else
+						errorsdetected="yes"
+						gfx failed
+					gfx subarrow "1. .. a nensync client"
+					gfx subarrow "2. .. a nensync server"
+					gfx subarrow "3. .. both a nensync client and server"
+					gfx subarrow "X. Abort nensync setup wizard"
+			2)
+				echo $selection
+				;;
+			3)
+				echo $selection
+				;;
+			4)
+				echo $selection
+				;;
+			X)
+				nensetup
+			esac
+
+	
 }
 
 gfx splash
 log_engine Start
 
+log_engine NewSubEntry "Checking startup parameters"
+if [ $1 == --setup ]
+	then
+	log_engine NewEntry "Invoked setup due to --setup parameter"
+		nensetup
+	log_engine NewEntry "Setup finished. Closing nensync"
+	log_engine End
+		exit
+fi
+
 gfx header
 gfx arrow "Initializing Nordic Encrytion Net node sync..."
 log_engine NewEntry "Initalizing Nordic Encryption Net node sync"
-
 # --- Filecheck
 # We need to make sure necessary files are present
 gfx arrow "Verifying cfg files..."
