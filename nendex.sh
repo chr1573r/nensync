@@ -2,7 +2,7 @@
 
 # nendex.sh
 # Creates a file index and calculates the SHA512 of each file in the nen data directory
-VERSION="1.0.0"
+VERSION="1.0.1"
 
 # Pretty colours!
 DEF="\x1b[0m"
@@ -87,7 +87,7 @@ do
 done
 
 # Add timestamp to .db
-echo >./nendex.db
+echo >>./nendex.db
 echo Last updated: `date '+%d.%m.%Y, %H:%M'`>>./nendex.db
 
 # Report to gui, quit
