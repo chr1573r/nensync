@@ -1,9 +1,10 @@
-nensync readme v.1.0
+nensync readme v.1.1
+http://nordicencryption.net - http://github.com/chr1573r/nensync
 
 ## What is nensync?
 
-nensync and the other components found in this repository is a set of shellscripts(bash)
-that aim to provide the tools needed to maintain a Nordic Encryption Net node.
+nensync and the other components found in this repository are a set of shell scripts(bash)
+that aim to provide the functionality needed to operate a GNU/Linux based Nordic Encryption Net node.
 
 In a nutshell, nensync will enable secure file sync between computers over the internet and/or LAN's through rsync/ssh.
 Different utils for maintaining and making these transfered files more accessable will also be a part of this project.
@@ -11,3 +12,4 @@ Different utils for maintaining and making these transfered files more accessabl
 
 
 More stuff will hopefully be added to this readme as the project matures
+-Christer
