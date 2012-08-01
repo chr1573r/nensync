@@ -1,4 +1,4 @@
-nensync readme v.1.1
+nensync readme v.1.2
 http://nordicencryption.net - http://github.com/chr1573r/nensync
 
 ## What is nensync?
@@ -6,10 +6,21 @@ http://nordicencryption.net - http://github.com/chr1573r/nensync
 nensync and the other components found in this repository are a set of shell scripts(bash)
 that aim to provide the functionality needed to operate a GNU/Linux based Nordic Encryption Net node.
 
-In a nutshell, nensync will enable secure file sync between computers over the internet and/or LAN's through rsync/ssh.
-Different utils for maintaining and making these transfered files more accessable will also be a part of this project.
+## Nordic Encryption Net?
+Nordic Encryption Net, or NEN for short, is the actual name of the project which nensync plays an important role.
+The NEN project was made as a response to the norwegian "Datalagringsdirektivet", or "E.U. Data Retention Directive".
+You can read a short summary here: http://www.globallawwatch.com/2011/04/norway-implements-e-u-data-retention-directive-data-protection-authority-remains-critical/
+While the directive don't allow surveillance of the actual data itself, a future revision _might_ do so.. Who knows?
+Okay, this tin-foil hat/1984 stuff does not really concern us that much, but that's what inspired the project anyways.
+So yeah, NEN is the envisioned encrypted network used for exchanging files between computers in a private and secure manner
+And no, it is not a P2P/filesharing or public network, it is intended for private communication between friends.
 
+## Techical details:
+Written in bash, uses rsync and ssh for encrypted connections and file transfers.
+A webinterface based on PHP might see the light of day as well.
 
+Should run on most *nix flavours, but it has only been tested on the
+RedHat-based distro ClearOS (www.clearfoundation.com)
 
-More stuff will hopefully be added to this readme as the project matures
--Christer
+## Install instructions???
+Currently none, as nensync is not mature enough yet and may be changed completely before a "stable" release
