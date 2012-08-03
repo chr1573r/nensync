@@ -203,15 +203,16 @@ nensetup ()
 				gfx subarrow "Checking if required software is installed.."
 				if [ -f /usr/bin/rsync ]
 					then
-						rsync:
+						echo rsync:
 						gfx ok
 					else
 						errorsdetected="yes"
 						gfx failed
-						
+				fi
+
 				if [ -f /usr/sbin/sshd ]
 					then
-						sshd:
+						echo sshd:
 						gfx ok
 					else
 						errorsdetected="yes"
@@ -220,6 +221,7 @@ nensetup ()
 					gfx subarrow "2. .. a nensync server"
 					gfx subarrow "3. .. both a nensync client and server"
 					gfx subarrow "X. Abort nensync setup wizard"
+				fi
 			2)
 				echo $selection
 				;;
@@ -231,7 +233,7 @@ nensetup ()
 				;;
 			X)
 				nensetup
-			esac
+		esac
 
 	
 }
