@@ -222,6 +222,7 @@ nensetup ()
 					gfx subarrow "3. .. both a nensync client and server"
 					gfx subarrow "X. Abort nensync setup wizard"
 				fi
+				;;
 			2)
 				echo $selection
 				;;
