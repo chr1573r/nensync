@@ -198,7 +198,7 @@ nensetup ()
 			1)
 				gfx header
 				gfx arrow "nensync setup wizard: First time setup"
-				echo (Please note that this setup will overwrite any existing nensync config!)
+				echo "(Please note that this setup will overwrite any existing nensync config!)"
 				echo
 				gfx subarrow "Checking if required software is installed.."
 				if [ -f /usr/bin/rsync ]
