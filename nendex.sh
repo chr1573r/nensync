@@ -2,7 +2,7 @@
 
 # nendex.sh
 # Creates a file index and calculates the SHA512 of each file in the nen data directory
-APPVERSION="1.1.0"
+APPVERSION="1.1.1"
 
 # Load nenlib
 source nenlib.sh
@@ -16,13 +16,13 @@ for i in `cat server.cfg`; do export "$i"; done 2>/dev/null
 # Erase existing nendex.db content
 #
 # Hopefully, nendex will be capable of incremential updates to the db, so it won't need to be rebuilt all the time from scratch
-echo "#nendex.db made with nendex $VERSION">./nendex.db
+echo "#nendex.db made with nendex $APPVERSION">./nendex.db
 echo >>./nendex.db
 
 # GUI init
 clear
 # Header
-			echo -e "$RED""///"$YELLOW" nendex.sh v.$VERSION "$RED"/// "$DEF""
+			echo -e "$RED""///"$YELLOW" nendex.sh v.$APPVERSION "$RED"/// "$DEF""
 echo
 echo "Updating nendex...(datadir: $REMOTEPATH)"
 echo
