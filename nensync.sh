@@ -2,7 +2,7 @@
 
 # Declare variables
 
-VERSION="0.7.X"
+nensync_version="0.7.X"
 LOCALPATH="/home/nen/data"
 #REMOTEPATH="/home/nen/data/"
 REMOTEUSER="nen"
@@ -23,234 +23,11 @@ clear
 echo nensync loading..
 echo Declaring functions...
 
-
-gfx ()
-{
-	# This function provides "[  OK  ]" and "[FAILED]" text output (followed by a line break)
-	# SYNTAX: gfx [element] [element text, if applicable]
-	# Valid elements:
-	#	Feedback gfx:
-	#			"ok" - Prints "[  OK  ]" with green text
-	#			"failed" - Prints "[FAILED]" with red text
-	#	Design gfx:
-	#			"splash" - The splashscreen, logo made possible by http://www.network-science.de/ascii/
-	#			"line" - Draws a red line (-----)
-	#			"header" - adds a yellow line, echos param $2, adds a yellow line again
-	#	Error gfx:
-	#			
-	# "gfx ok" will print "[  OK  ]", while "gfx failed" will print "[FAILED]"
-	
-	case "$1" in
-
-		ok)
-			echo -e "                         "$WHITE"[  "$GREEN"OK"$WHITE"  ]$DEF"
-				echo
-				;;	
-	
-		failed)
-		        echo -e "                         "$WHITE"["$RED"FAILED"$WHITE"]$DEF"
-			echo
-			;;
-		
-		splash)
-			clear
-			echo
-			echo
-			echo
-			echo          
-			echo
-			echo
-			echo
-			echo
-			echo -e "$GREEN""         88d888b. .d8888b. 88d888b. .d8888b. dP    dP 88d888b. .d8888b. "
-			echo -e "         88'   88 88ooood8 88'   88 Y8ooooo. 88    88 88'   88 88'   "" "
-			echo -e "         88    88 88.  ... 88    88       88 88.  .88 88    88 88.  ... "
-			echo -e "         dP    dP '88888P' dP    dP '88888P' '8888P88 dP    dP '88888P' "
-			echo -e "$BLUE""         ooooooooooooooooooooooooooooooooooooo~~~~"$GREEN".88"$BLUE"~ooooooooooooooooo         "
-			echo -e "$GREEN""                                             d8888P      "
-			echo
-			echo
-			echo
-			echo -e "$GREEN""          nensync version $VERSION"$DEF" - " $BLUE"Nordic Encryption Net"$DEF" (C) "$BLUE"2011-2012"$DEF
-			sleep 2
-			clear
-			
-			;;
-		
-		line)
-			echo -e "$RED------------------------------$DEF"
-			;;
-
-		header)
-			clear
-			echo -e "$BLUE""///"$GREEN" nensync "$BLUE"/// "$GREEN"$HOSTNAME"
-			echo
-			;;
-		arrow)
-			echo -e "$RED""--""$YELLOW""> ""$DEF""$2"
-			echo
-			;;
-		subarrow)
-			echo -e "$RED""----""$YELLOW""> ""$DEF""$2"
-			;;
-		
-		subspace)
-			echo -e "     $2"
-			;;
-		
-		*)
-			
-	esac
-}
-
-log_engine ()
-{
-	# This function aims to provide easy and standarized template-based logging
-	# SYNTAX: log_engine [entrytype] "<text>"
-	# 
-	# Validentry types: Start, NewEntry, NewSubEntry, Error, End
-	# Write more documentation here!
-	
-	case "$1" in
-
-		Start)
-			echo >>$LOGFILE
-			echo >>$LOGFILE
-			echo "----------------------------------------------------------" >>$LOGFILE
-			echo "nensync version $VERSION - Nordic Encryption Net (C) 2011" >>$LOGFILE
-			echo >>$LOGFILE
-			echo "This session was invoked  at: `/bin/date`" >>$LOGFILE
-			echo >>$LOGFILE
-			;;
-
-		NewEntry)
-				if [ -z "$2" ]
-				then
-				echo "LOGENGINE ERROR, NewEntry must be followed by text!" >>$LOGFILE
-				else
-				echo "[`/bin/date`] $2" >>$LOGFILE
-				fi
-			;;
-
-		NewSubEntry)
-        	        	if [ -z "$2" ]
-               	 		then
-               	 		echo "LOGENGINE ERROR, NewSubEntry must be followed by text!" >>$LOGFILE
-               	 		else
-				echo "[`/bin/date`] --> $2" >>$LOGFILE
-			fi
-			;;
-
-		End)
-				echo "[`/bin/date`] * * * nensync is exiting... * * *" >>$LOGFILE
-			;;
-	
-		*)
-				echo "THE LOGENGINE RECIEVED AN UNKNOWN PARAMETER: $1" >>$LOGFILE
-			;;
-	esac
-}
-
-
-filecheck ()
-{
-	# This function check if the file, param#1, exists or not
-	# If file does not exist, it will display an error message and halt
-	# If file does exist, the nensync continues
-	# Regardless, it will log the outcome
-	# SYNTAX filecheck [FILE]
-	
-		# Checking file
-
-		log_engine NewEntry "Checking if file "$1" exists.."
-		if [ -f $1 ];
-			then
-				log_engine NewSubEntry "File "$1" exists!"
-			else
-				gfx failed
-				log_engine NewSubEntry "FATAL: File "$1" does not found!"
-				echo "FATAL ERROR: Requested file "$1" not found!"
-				echo "NENsync aborted!"
-				echo "If this is the first time you are running nensync,"
-				echo "please run "nensync.sh --setup" to configure nensync"
-			exit
-		fi
-}
-
-nensetup ()
-{
-	# This function contains an install wizard/setup
-	
-	gfx header
-	gfx arrow "nensync setup wizard"
-	echo "Welcome to the nensync setup wizard."
-	echo "Select the operation you wish to perform:"
-	gfx subarrow "1. Run first time setup"
-	gfx subarrow "2. Adjust nensync configuration"
-	gfx subarrow "3. Display current nensync server/client settings"
-	gfx subarrow "X. Abort nensync setup wizard"
-	echo
-	echo -n "Select one of the options above and press [ENTER]:"
-	read selection
-	
-		case "$selection" in
-		
-			1)
-				gfx header
-				gfx arrow "nensync setup wizard: First time setup"
-				echo "(Please note that this setup will overwrite any existing nensync config!)"
-				echo
-				gfx subarrow "Checking if required software is installed.."
-				if [ -f /usr/bin/rsync ]
-					then
-						echo rsync:
-						gfx ok
-					else
-						errorsdetected="yes"
-						gfx failed
-				fi
-
-				if [ -f /usr/sbin/sshd ]
-					then
-						echo sshd:
-						gfx ok
-					else
-						errorsdetected="yes"
-						gfx failed
-					gfx subarrow "1. .. a nensync client"
-					gfx subarrow "2. .. a nensync server"
-					gfx subarrow "3. .. both a nensync client and server"
-					gfx subarrow "X. Abort nensync setup wizard"
-				fi
-				;;
-			2)
-				echo $selection
-				;;
-			3)
-				echo $selection
-				;;
-			4)
-				echo $selection
-				;;
-			X)
-				nensetup
-		esac
-
-	
-}
+# We need to load functions fron nenlib.sh:
+source nenlib.sh
 
 gfx splash
 log_engine Start
-
-log_engine NewSubEntry "Checking startup parameters"
-if [ $1 == --setup ]
-	then
-	log_engine NewEntry "Invoked setup due to --setup parameter"
-		nensetup
-	log_engine NewEntry "Setup finished. Closing nensync"
-	log_engine End
-		exit
-fi
 
 gfx header
 gfx arrow "Initializing Nordic Encrytion Net node sync..."
@@ -311,7 +88,7 @@ do
 				echo
 				gfx subspace "$RED""SYNC ABORTED:$DEF Remote directory not set, aborting"
 				gfx subspace "Please make sure the node $GREEN$NODE$DEF is valid"
-				gfx subspace "and that the node is compatible with nensync $VERSION"
+				gfx subspace "and that the node is compatible with nensync $nensync_version"
 				echo	
 		
 		else 
