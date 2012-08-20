@@ -50,7 +50,7 @@ gfx ()
 			echo
 			echo
 			echo
-			echo -e "$GREEN""          nensync version $nensync_version"$DEF" - " $BLUE"Nordic Encryption Net"$DEF" (C) "$BLUE"2011-2012"$DEF
+			echo -e "$GREEN""          nensync version $APPVERSION"$DEF" - " $BLUE"Nordic Encryption Net"$DEF" (C) "$BLUE"2011-2012"$DEF
 			sleep 2
 			clear
 			
