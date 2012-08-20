@@ -9,16 +9,6 @@ LOCALPATH="/home/nen/data"
 REMOTEUSER="nen"
 LOGFILE="nensync.log"
 
-# Pretty colours!
-DEF="\x1b[0m"
-WHITE="\e[0;37m"
-BLUE="\x1b[34;01m"
-CYAN="\x1b[36;01m"
-GREEN="\x1b[32;01m"
-RED="\x1b[31;01m"
-GRAY="\x1b[37;01m"
-YELLOW="\x1b[33;01m"
-
 clear
 
 echo nensync loading..

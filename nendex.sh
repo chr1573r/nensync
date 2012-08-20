@@ -2,60 +2,10 @@
 
 # nendex.sh
 # Creates a file index and calculates the SHA512 of each file in the nen data directory
-VERSION="1.0.1"
+APPVERSION="1.1.0"
 
-# Pretty colours!
-DEF="\x1b[0m"
-WHITE="\e[0;37m"
-BLUE="\x1b[34;01m"
-CYAN="\x1b[36;01m"
-GREEN="\x1b[32;01m"
-RED="\x1b[31;01m"
-GRAY="\x1b[37;01m"
-YELLOW="\x1b[33;01m"
-
-
-
-function timer()
-# timer function (http://www.linuxjournal.com/content/use-date-command-measure-elapsed-time)
-# Elapsed time.  Usage:
-#
-#   t=$(timer)
-#   ... # do something
-#   printf 'Elapsed time: %s\n' $(timer $t)
-#      ===> Elapsed time: 0:01:12
-#
-#
-#####################################################################
-# If called with no arguments a new timer is returned.
-# If called with arguments the first is used as a timer
-# value and the elapsed time is returned in the form HH:MM:SS.
-#
-{
-    if [[ $# -eq 0 ]]; then
-        echo $(date '+%s')
-    else
-        local  stime=$1
-        etime=$(date '+%s')
-
-        if [[ -z "$stime" ]]; then stime=$etime; fi
-
-        dt=$((etime - stime))
-        ds=$((dt % 60))
-        dm=$(((dt / 60) % 60))
-        dh=$((dt / 3600))
-        printf '%d:%02d:%02d' $dh $dm $ds
-    fi
-}
-
-# If invoked directly run test code.
-if [[ $(basename $0 .sh) == 'timer' ]]; then
-    t=$(timer)
-    read -p 'Enter when ready...' p
-    printf 'Elapsed time: %s\n' $(timer $t)
-fi
-
-
+# Load nenlib
+source nenlib.sh
 
 
 # Start timer, set start time, read settings from server.cfg
