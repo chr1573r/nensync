@@ -7,7 +7,6 @@ APPVERSION="1.1.1"
 # Load nenlib
 source nenlib.sh
 
-
 # Start timer, set start time, read settings from server.cfg
 t=$(timer)
 STARTTIME=`date '+%d.%m.%Y, %H:%M'`

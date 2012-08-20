@@ -261,4 +261,4 @@ nensetup ()
 	
 }
 
-echo Functions "gfx", "log_engine", "filecheck" and "nensetup" loaded
+echo Functions "gfx", "log_engine", "filecheck", "timer" and "nensetup" loaded
