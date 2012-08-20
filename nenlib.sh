@@ -12,7 +12,7 @@ gfx ()
 	#			"ok" - Prints "[  OK  ]" with green text
 	#			"failed" - Prints "[FAILED]" with red text
 	#	Design gfx:
-	#			"splash" - The splashscreen, logo made possible by http://www.network-science.de/ascii/
+	#			"splash_nensync" - The nensync splashscreen, logo made possible by http://www.network-science.de/ascii/
 	#			"line" - Draws a red line (-----)
 	#			"header" - adds a yellow line, echos param $2, adds a yellow line again
 	#	Error gfx:
@@ -31,7 +31,7 @@ gfx ()
 			echo
 			;;
 		
-		splash)
+		splash_nensync)
 			clear
 			echo
 			echo
@@ -50,7 +50,7 @@ gfx ()
 			echo
 			echo
 			echo
-			echo -e "$GREEN""          nensync version $VERSION"$DEF" - " $BLUE"Nordic Encryption Net"$DEF" (C) "$BLUE"2011-2012"$DEF
+			echo -e "$GREEN""          nensync version $nensync_version"$DEF" - " $BLUE"Nordic Encryption Net"$DEF" (C) "$BLUE"2011-2012"$DEF
 			sleep 2
 			clear
 			
@@ -62,7 +62,7 @@ gfx ()
 
 		header)
 			clear
-			echo -e "$BLUE""///"$GREEN" nensync "$BLUE"/// "$GREEN"$HOSTNAME"
+			echo -e "$BLUE""///"$GREEN" $APPNAME "$BLUE"/// "$GREEN"$HOSTNAME"
 			echo
 			;;
 		arrow)
@@ -96,7 +96,7 @@ log_engine ()
 			echo >>$LOGFILE
 			echo >>$LOGFILE
 			echo "----------------------------------------------------------" >>$LOGFILE
-			echo "nensync version $VERSION - Nordic Encryption Net (C) 2011" >>$LOGFILE
+			echo "$APPNAME version $APPVERSION - Nordic Encryption Net (C) 2011" >>$LOGFILE
 			echo >>$LOGFILE
 			echo "This session was invoked  at: `/bin/date`" >>$LOGFILE
 			echo >>$LOGFILE
@@ -121,7 +121,7 @@ log_engine ()
 			;;
 
 		End)
-				echo "[`/bin/date`] * * * nensync is exiting... * * *" >>$LOGFILE
+				echo "[`/bin/date`] * * * $APPNAME is terminating... * * *" >>$LOGFILE
 			;;
 	
 		*)

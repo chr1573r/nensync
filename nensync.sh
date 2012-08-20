@@ -2,11 +2,12 @@
 
 # Declare variables
 
-nensync_version="0.7.X"
+APPNAME=nensync
+APPVERSION="0.7.X"
 LOCALPATH="/home/nen/data"
 #REMOTEPATH="/home/nen/data/"
 REMOTEUSER="nen"
-LOGFILE="sync.log"
+LOGFILE="nensync.log"
 
 # Pretty colours!
 DEF="\x1b[0m"
@@ -26,7 +27,7 @@ echo Declaring functions...
 # We need to load functions fron nenlib.sh:
 source nenlib.sh
 
-gfx splash
+gfx splash_nensync
 log_engine Start
 
 gfx header
@@ -88,7 +89,7 @@ do
 				echo
 				gfx subspace "$RED""SYNC ABORTED:$DEF Remote directory not set, aborting"
 				gfx subspace "Please make sure the node $GREEN$NODE$DEF is valid"
-				gfx subspace "and that the node is compatible with nensync $nensync_version"
+				gfx subspace "and that the node is compatible with nensync $APPVERSION"
 				echo	
 		
 		else 
