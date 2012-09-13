@@ -167,7 +167,6 @@ filecheck ()
 }
 
 timer()
-
 {
 	# timer function (http://www.linuxjournal.com/content/use-date-command-measure-elapsed-time)
 	# Elapsed time.  Usage:
@@ -256,9 +255,7 @@ nensetup ()
 				;;
 			X)
 				nensetup
-		esac
-
-	
+		esac	
 }
 
 echo Functions "gfx", "log_engine", "filecheck", "timer" and "nensetup" loaded
