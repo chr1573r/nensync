@@ -135,7 +135,7 @@ log_engine ()
 			;;
 	
 		*)
-				echo "THE LOGENGINE RECIEVED AN UNKNOWN PARAMETER: $1" >>$LOGFILE
+				echo "THE LOG ENGINE RECIEVED AN UNKNOWN PARAMETER: $1" >>$LOGFILE
 			;;
 	esac
 }
