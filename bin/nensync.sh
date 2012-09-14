@@ -7,8 +7,6 @@ APPVERSION="0.7.6"
 # Get directory where nensync.sh is stored
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-echo $DIR
-sleep 400
 # Read variables from cfg file
 source $DIR/cfg/nen.cfg
 
