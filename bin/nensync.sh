@@ -8,7 +8,7 @@ APPVERSION="0.7.6"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Read variables from cfg file
-source $DIR/cfg/nen.cfg
+source $DIR/../cfg/nen.cfg
 
 # Set additional variables that uses the one previously declared
 
@@ -18,7 +18,7 @@ echo nensync loading..
 echo Declaring functions...
 
 # We need to load functions fron nenlib.sh:
-source nenlib.sh
+source $NENDIR/cfg/nenlib.sh
 
 gfx splash_nensync
 log_engine Start
