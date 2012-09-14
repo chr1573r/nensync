@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Declare variables
-nenlib_version=0.1
-
 # Pretty colours!
 DEF="\x1b[0m"
 WHITE="\e[0;37m"
@@ -100,6 +97,9 @@ log_engine ()
 	# Validentry types: Start, NewEntry, NewSubEntry, Error, End
 	# Write more documentation here!
 	
+	# Declare logfile depending on what app calls this function
+	LOGFILE=$NENDIR/sys/logs/$APPNAME.log
+
 	case "$1" in
 
 		Start)
