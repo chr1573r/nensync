@@ -3,11 +3,12 @@
 # Declare variables
 
 APPNAME=nensync
-APPVERSION="0.7.X"
-LOCALPATH="/home/nen/data"
-#REMOTEPATH="/home/nen/data/"
-REMOTEUSER="nen"
-LOGFILE="nensync.log"
+APPVERSION="0.7.6"
+
+# Read variables from cfg file
+source ../cfg/nen.cfg
+
+# Set additional variables that uses the one previously declared
 
 clear
 
@@ -42,7 +43,7 @@ log_engine NewSubEntry "Files verified!"
 # - Read and sync with nodes in index file - #
 ##############################################
 
-for NODECFG in `cat /home/nen/node.lst`;
+for NODECFG in `cat $NENDIR/node.lst`;
 do
 	# We want to read NODECFG, which consists of the hostname and the port, seperated by a ":"
 	# and split it into two variables, NODE and PORT
@@ -96,9 +97,9 @@ do
 					echo
 					gfx subarrow "Syncing..."
 					echo "Sync started `/bin/date`"
-					log_engine NewSubEntry "Initiating rsync: rsync -avzh --progress --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $REMOTEUSER@$NODE:$REMOTEPATH $LOCALPATH"
+					log_engine NewSubEntry "Initiating rsync: rsync -avzh --progress --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $REMOTEUSER@$NODE:$REMOTEPATH/ $DATADIR"
 				
-					rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $REMOTEUSER@$NODE:$REMOTEPATH $LOCALPATH
+					rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $REMOTEUSER@$NODE:$REMOTEPATH $DATADIR
 				
 					echo
 					gfx arrow "$BLUE""Finished sync with node $NODE.$DEF (`/bin/date`)"
