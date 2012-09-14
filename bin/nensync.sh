@@ -41,7 +41,7 @@ log_engine NewSubEntry "Files verified!"
 # - Read and sync with nodes in index file - #
 ##############################################
 
-for NODECFG in `cat $NENDIR/node.lst`;
+for NODECFG in `cat $NENDIR/cfg/node.lst`;
 do
 	# We want to read NODECFG, which consists of the hostname and the port, seperated by a ":"
 	# and split it into two variables, NODE and PORT
