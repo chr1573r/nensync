@@ -18,7 +18,7 @@ echo nensync loading..
 echo Declaring functions...
 
 # We need to load functions fron nenlib.sh:
-source $NENDIR/cfg/nenlib.sh
+source $NENDIR/bin/nenlib.sh
 
 gfx splash_nensync
 log_engine Start
