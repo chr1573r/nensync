@@ -28,14 +28,10 @@ gfx arrow "Initializing Nordic Encrytion Net node sync..."
 log_engine NewEntry "Initalizing Nordic Encryption Net node sync"
 # --- Filecheck
 # We need to make sure necessary files are present
-gfx arrow "Verifying cfg files..."
-log_engine NewSubEntry "Verifying cfg files..."
+gfx arrow "Verifying important nen files..."
+log_engine NewSubEntry "Verifying important nen files..."
 gfx subarrow "node.lst"
-filecheck node.lst
-gfx subarrow "server.cfg"
-filecheck server.cfg
-gfx subarrow "client.cfg"
-filecheck client.cfg
+filecheck $NENDIR/cfg/node.lst
 log_engine NewSubEntry "Files verified!"
 # --- Filecheck finished
 
