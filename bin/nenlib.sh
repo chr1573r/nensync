@@ -268,14 +268,12 @@ cfgvalidator ()
 	#			cfgvalidator add <file>
 	# 
 	# Modes:
-	#		interactive - cfgvalidator displays a cleaned(look below) and secured version of the cfg file (where every line is injected with "#" first)
+	#		add - cfgvalidator displays a cleaned(look below) and secured version of the cfg file (where every line is injected with "#" first)
+	#			  If the user accepts the cfg file, it´s checksum is generated and added to $nendir/sys/trusted/$nodename/<file> and as a seperate sum file with a .sum extension
 	#		clean - cfgvalidator cleans the cfg file in conjunction with what is described here: http://wiki.bash-hackers.org/howto/conffile
 	#		compare - compares a cfgfile against a trusted cfgfile using sha512sum
-	#		add - 
 	#
 	# cfgvalidator is by no means bulletproof, and there are ways to pass "rouge commands" by modifying a cfg file that is sourced
-	# The most safe option is interactive, as it requires that the user confirms that the cfg file looks alright
-	# The trusted cfg files checksums are stored in /sys/trustedcfg and should be stored with the namestandard nodehostname_filename.sum
 
 }
 echo Functions "gfx", "log_engine", "filecheck", "timer", "nensetup" , "cfgvalidator" loaded
