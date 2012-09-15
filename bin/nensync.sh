@@ -54,6 +54,10 @@ do
 		PORT=14514			
 	fi
 
+	echo TEST TEST TEST TEST TEST
+	nenget nensync.sh tmp/nensync.sh
+	sleep 10
+
 	gfx header
 	gfx arrow "Starting sync with node $GREEN$NODE$DEF:"
 	
