@@ -55,8 +55,10 @@ do
 	fi
 
 	echo TEST TEST TEST TEST TEST
-	nenget nensync.sh tmp/nensync.sh
-	sleep 10
+	echo Testing config fetching
+	nenget node.cfg tmp/$NODE_node.cfg
+	source tmp/$NODE_node.cfg
+	sleep 5
 
 	gfx header
 	gfx arrow "Starting sync with node $GREEN$NODE$DEF:"
@@ -68,15 +70,15 @@ do
 	for i in `ssh -p $PORT $SYNCUSER@$NODE cat server.cfg`; do export "$i"; done 2>/dev/null
 
 # Debug
-#	echo "SPEEDLIMIT:"$SPEEDLIMIT""
-#	echo "REMOTEPATH: "$REMOTEPATH""
-#	echo "NODECFG: "$NODECFG""
-#	echo "NODE: "$NODE""
-#	echo "PORT: "$PORT""
-#	sleep 10
+	echo "SPEEDLIMIT:"$SPEEDLIMIT""
+	echo "NODEDATADIR: "$NODEDATADIR""
+	echo "NODECFG: "$NODECFG""
+	echo "NODE: "$NODE""
+	echo "PORT: "$PORT""
+	sleep 5
 	
 		gfx subarrow "Verifying node configuration..."
-		if [ -z "$REMOTEPATH" ]; then 	# -n tests to see if the argument is non empty
+		if [ -z "$NODEDATADIR" ]; then 	# -n tests to see if the argument is non empty
 				log_engine NewSubEntry "SYNC ABORTED: Remotepath not set in remote server.cfg"
 				gfx failed
 				echo
@@ -99,9 +101,9 @@ do
 					echo
 					gfx subarrow "Syncing..."
 					echo "Sync started `/bin/date`"
-					log_engine NewSubEntry "Initiating rsync: rsync -avzh --progress --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $SYNCUSER@$NODE:$REMOTEPATH/ $DATADIR"
+					log_engine NewSubEntry "Initiating rsync: rsync -avzh --progress --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $SYNCUSER@$NODE:$NODEDATADIR/ $DATADIR"
 				
-					rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $SYNCUSER@$NODE:$REMOTEPATH $DATADIR
+					rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $SYNCUSER@$NODE:$NODEDATADIR $DATADIR
 				
 					echo
 					gfx arrow "$BLUE""Finished sync with node $NODE.$DEF (`/bin/date`)"
