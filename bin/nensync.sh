@@ -63,6 +63,10 @@ do
 	log_engine NewSubEntry "Fetching node configuration..."
 	nenget node.cfg tmp/$NODE_node.cfg
 
+	gfx subarrow "Reading node configuration..."
+	log_engine NewSubEntry "Reading node configuration..."
+	source tmp/$NODE_node.cfg
+
 # Debug
 	echo "ENABLED: $ENABLED"
 	echo "SPEEDLIMIT: $SPEEDLIMIT"
