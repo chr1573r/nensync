@@ -258,14 +258,29 @@ nensetup ()
 		esac	
 }
 
+nenget()
+{
+	# Function that fetches a single file or directory from a node
+	# Uses variables $NODE $SYNCUSER $PORT and $NENDIR
+	#
+	# SYNTAX: nenget <file> <savelocation>
+	#
+	# <file> is relative to the node's basedir
+	# e.g "nenget node.cfg $NENDIR/tmp/node.cfg" would download 
+	# the file node.cfg in the homedir of $NODE and save it locally to the tmp directory
+	echo -e "Downloading file "$BLUE"$1"$DEF" from "$GREEN"$NODE"$DEF"..."
+
+	scp -P $PORT $SYNCUSER@$NODE:$1 $2
+}
+
 cfgvalidator ()
 {
 	# This function is used whenever we want to validate a cfg file.
 	# After validation, the cfg file is sourced.
 	# 
-	# SYNTAX: 	cfgvalidator <interactive OR clean> <file>
+	# SYNTAX: 	cfgvalidator add <file>
+	#			cfgvalidator clean <file>
 	#			cfgvalidator compare <new and untrusted cfgfile> <old and trusted cfgfile>
-	#			cfgvalidator add <file>
 	# 
 	# Modes:
 	#		add - cfgvalidator displays a cleaned(look below) and secured version of the cfg file (where every line is injected with "#" first)
@@ -274,6 +289,19 @@ cfgvalidator ()
 	#		compare - compares a cfgfile against a trusted cfgfile using sha512sum
 	#
 	# cfgvalidator is by no means bulletproof, and there are ways to pass "rouge commands" by modifying a cfg file that is sourced
+	# Uses variables $NENDIR, $NODE
+
+	# Seperate the path and the file in two variables
+	INPUTFILE=`basename $2`
+	INPUTDIR=`dirname $2`
+	# Get filename for the file in the "trusted" cfg folder
+	COMPAREFILE=`basename $3`
+
+	case "$1" in
+			add)
+				#Copy file to $NENDIR/sys/untrusted
+				cp $2 $NENDIR/sys/untrusted/$
+
 
 }
 echo Functions "gfx", "log_engine", "filecheck", "timer", "nensetup" , "cfgvalidator" loaded
