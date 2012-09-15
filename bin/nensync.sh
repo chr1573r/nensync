@@ -61,7 +61,7 @@ do
 
 	gfx subarrow "Reading node configuration..."
 	log_engine NewSubEntry "Fetching and checking node configuration via SSH"
-	for i in `ssh -p $PORT nen@$NODE cat server.cfg`; do export "$i"; done 2>/dev/null
+	for i in `ssh -p $PORT $SYNCUSER@$NODE cat server.cfg`; do export "$i"; done 2>/dev/null
 
 # Debug
 #	echo "SPEEDLIMIT:"$SPEEDLIMIT""
@@ -90,14 +90,14 @@ do
 				*)
 					log_engine NewSubEntry "Displaying MOTD"
 					gfx subarrow "Displaying message from node"
-					ssh -p $PORT nen@$NODE cat motd.txt 2>/dev/null
+					ssh -p $PORT $SYNCUSER@$NODE cat motd.txt 2>/dev/null
 					
 					echo
 					gfx subarrow "Syncing..."
 					echo "Sync started `/bin/date`"
-					log_engine NewSubEntry "Initiating rsync: rsync -avzh --progress --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $REMOTEUSER@$NODE:$REMOTEPATH/ $DATADIR"
+					log_engine NewSubEntry "Initiating rsync: rsync -avzh --progress --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $SYNCUSER@$NODE:$REMOTEPATH/ $DATADIR"
 				
-					rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $REMOTEUSER@$NODE:$REMOTEPATH $DATADIR
+					rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $SYNCUSER@$NODE:$REMOTEPATH $DATADIR
 				
 					echo
 					gfx arrow "$BLUE""Finished sync with node $NODE.$DEF (`/bin/date`)"
