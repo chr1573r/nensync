@@ -68,6 +68,7 @@ do
 	source tmp/$NODE_node.cfg
 
 # Debug
+	echo Debug info
 	echo "ENABLED: $ENABLED"
 	echo "SPEEDLIMIT: $SPEEDLIMIT"
 	echo "NODEDATADIR: $NODEDATADIR"

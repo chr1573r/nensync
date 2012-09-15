@@ -276,7 +276,7 @@ nenget()
 cfgvalidator ()
 {
 	# This function is used whenever we want to validate a cfg file.
-	# After validation, the cfg file is sourced.
+	# After validation, it sets value CFGVALID to either 0 or 1
 	# 
 	# SYNTAX: 	cfgvalidator add <file>
 	#			cfgvalidator clean <file>
