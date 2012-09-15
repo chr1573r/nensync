@@ -54,37 +54,32 @@ do
 		PORT=14514			
 	fi
 
-	echo TEST TEST TEST TEST TEST
-	echo Testing config fetching
-	nenget node.cfg tmp/$NODE_node.cfg
-	source tmp/$NODE_node.cfg
-	sleep 5
-
 	gfx header
 	gfx arrow "Starting sync with node $GREEN$NODE$DEF:"
 	
 	log_engine NewEntry "Starting sync with node $NODE"
 
-	gfx subarrow "Reading node configuration..."
-	log_engine NewSubEntry "Fetching and checking node configuration via SSH"
-	for i in `ssh -p $PORT $SYNCUSER@$NODE cat server.cfg`; do export "$i"; done 2>/dev/null
+	gfx subarrow "Fetching node configuration..."
+	log_engine NewSubEntry "Fetching node configuration..."
+	nenget node.cfg tmp/$NODE_node.cfg
 
 # Debug
-	echo "SPEEDLIMIT:"$SPEEDLIMIT""
-	echo "NODEDATADIR: "$NODEDATADIR""
-	echo "NODECFG: "$NODECFG""
-	echo "NODE: "$NODE""
-	echo "PORT: "$PORT""
+	echo "ENABLED: $ENABLED"
+	echo "SPEEDLIMIT: $SPEEDLIMIT"
+	echo "NODEDATADIR: $NODEDATADIR"
+	echo "NODECFG: $NODECFG"
+	echo "NODE: $NODE"
+	echo "PORT: $PORT"
 	sleep 5
 	
 		gfx subarrow "Verifying node configuration..."
 		if [ -z "$NODEDATADIR" ]; then 	# -n tests to see if the argument is non empty
-				log_engine NewSubEntry "SYNC ABORTED: Remotepath not set in remote server.cfg"
+				log_engine NewSubEntry "SYNC ABORTED: NODEDATADIR not set in the node's node.cfg file"
 				gfx failed
 				echo
-				gfx subspace "$RED""SYNC ABORTED:$DEF Remote directory not set, aborting"
-				gfx subspace "Please make sure the node $GREEN$NODE$DEF is valid"
-				gfx subspace "and that the node is compatible with nensync $APPVERSION"
+				gfx subspace "$RED""SYNC ABORTED:$DEF Remote data directory not set, aborting"
+				gfx subspace "Please make sure the node $GREEN$NODE$DEF is a valid node"
+				gfx subspace "and that the node is compatible with your nensync version ($APPVERSION)"
 				echo	
 		
 		else 
