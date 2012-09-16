@@ -33,7 +33,7 @@ gfx ()
 		ok)
 			echo -e "                         "$WHITE"[  "$GREEN"OK"$WHITE"  ]$DEF"
 				echo
-				if [ $LOGLEVEL>2 ] then log_engine FunctionLog "Generated gfx:[OK]"; fi
+				if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Generated gfx:[OK]" ; fi
 				;;	
 			
 		failed)
