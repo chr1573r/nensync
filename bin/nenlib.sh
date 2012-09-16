@@ -35,7 +35,7 @@ gfx ()
 				echo
 				if [ $LOGLEVEL>2 ] then log_engine FunctionLog "Generated gfx:[OK]"; fi
 				;;	
-	
+			
 		failed)
 		        echo -e "                         "$WHITE"["$RED"FAILED"$WHITE"]$DEF"
 			echo
@@ -285,35 +285,82 @@ nenget()
 	scp -P $PORT $SYNCUSER@$NODE:$1 $2
 }
 
-cfgvalidator ()
+cfgkeystore ()
 {
-	# This function is used whenever we want to validate a cfg file.
-	# After validation, it sets value CFGVALID to either 0 or 1
-	# 
-	# SYNTAX: 	cfgvalidator add <file>
-	#			cfgvalidator clean <file>
-	#			cfgvalidator compare <new and untrusted cfgfile> <old and trusted cfgfile>
-	# 
-	# Modes:
-	#		add - cfgvalidator displays a cleaned(look below) and secured version of the cfg file (where every line is injected with "#" first)
-	#			  If the user accepts the cfg file, it´s checksum is generated and added to $nendir/sys/trusted/$nodename/<file> and as a seperate sum file with a .sum extension
-	#		clean - cfgvalidator cleans the cfg file in conjunction with what is described here: http://wiki.bash-hackers.org/howto/conffile
-	#		compare - compares a cfgfile against a trusted cfgfile using sha512sum
+	# This function is used to interact with the cfg file keystore located in $NENDIR/keystore/
+	# The keystore directory contains three sub directories, "trusted", "untrusted" and "pending"
+	# cfgkeystore is used to download and verify node.cfg files from nodes before the actual file transfer takes place.
+	# node.cfg files are "cleaned" (described below) and stored in the different sub-folders depending on their status.
 	#
-	# cfgvalidator is by no means bulletproof, and there are ways to pass "rouge commands" by modifying a cfg file that is sourced
-	# Uses variables $NENDIR, $NODE
+	# No options are specified when calling the function, as cfgkeystore uses the current values in $NODE, $PORT, $NENDIR
+	# IMPORTANT: If $TRUSTPOLICY is set to 0, cfgkeystore will always trust the node specified and allow the parent script to continue regardless of what the node.cfg file contained.
+	#
+	# SYNTAX: 	cfgkeystore add
+	#			cfgkeystore remove
+	#			cfgkeystore check
+	# 
+	#		
+	# Modes:
+	#		All modes uses nenget() to download the node.cfg file from the current $NODE and then saves it as $NODE_node.cfg to $NENDIR/sys/keystore/pending.
+	#		A "cleaning filter" (described below) is applied to the file and then a sha512 checksum is generated and stored as $NODE_node.cfg.sum
+	#		Afterwards, the different modes determine further actions:
+	#
+	#		add - The cfg file gets injected with a "#" at the begining of each line and the file is displayed in console.
+	#			  A prompt asks the end-user on the basis of the node.cfg whether this node should be trusted
+	#			  If the user accepts the cfg file, both the cfg file and checksum file is moved from ../pending to ../trusted.
+	#			  If the user declines the cfg file, both the cfg file and checksum file is moved from ../pending to ../untrusted
+	#			  In cases where a host is already stored as trusted/untrusted, cfgkeystore will display both files, and ask to trust/untrust the new file
+	#
+	#		remove - cfgkeystore removes node.cfg/node.cfg.sum for the $NODE from ../trusted and ../untrusted
+	#		
+	#		check - cfgkeystore checks if the current $NODE's node.cfg is stored in the keystore.
+	#				If it is found in ../untrusted, $CFGVALID is set to 0 and information is sent to console.
+	#				If it is found in ../trusted, the file is checksummed and compared to the stored checksum.
+	#				In the case of a perfect checksum match, $CFGVALID is set to 1 and a message is sent to console
+	#				Otherwise a warning will be displayed and $CFGVALID is set to 0.
+	#				The host must be added again via cfgkeystore add.
+	#
+	# A "clean" version, means that the cfg file is passed trough a filter which aims to remove command execution attempts
+	# that could be added to node.cfg with malicious intentions. The filter is described here: http://wiki.bash-hackers.org/howto/conffile
+	# cfgkeystore and it's filters are by no means bulletproof, and there are ways to pass "rouge commands" by modifying a cfg file that is sourced.
+	# In other words, you should never connect to nodes you don't trust no matter what!
 
-	# Seperate the path and the file in two variables
-	INPUTFILE=`basename $2`
-	INPUTDIR=`dirname $2`
-	# Get filename for the file in the "trusted" cfg folder
-	COMPAREFILE=`basename $3`
+	PENDINGFILE='$NENDIR/sys/keystore/pending/$NODE_node.cfg'
+	PENDINGSUM='$NENDIR/sys/keystore/pending/$NODE_node.cfg.sum'
+	CLEANEDFILE='$NENDIR/sys/keystore/pending/$NODE_node.cfg_cleaned'
+
+
+		#Display information in console
+	gfx subarrow "Fetching node configuration..."
+	log_engine NewSubEntry "Fetching node configuration..."
+	# Download node.cfg from $NODE and save as set in $PENDINGFILE
+	nenget node.cfg $PENDINGFILE
+
+	# Check/Clean $PENDINGFILE
+
+	if egrep -q -v '^#|^[^ ]*=[^;]*' "$PENDINGFILE"; then
+		gfx subarrow "Node configuration file seems dirty, cleaning it..."
+		log_engine NewSubEntry "Node configuration file seems dirty, cleaning it..." >&2
+	  # filter the original to a new file
+	  egrep '^#|^[^ ]*=[^;&]*'  "$PENDINGFILE" > "$CLEANEDFILE"
+	  # remove unclean file and rename cleaned file to original name
+	  rm "$PENDINGFILE"
+	  mv "$CLEANEDFILE" "$PENDINGFILE"
+	fi
+
+	# Checksum node.cfg
+	sha512sum "$PENDINGFILE" >> "$PENDINGSUM"
+	gfx subarrow "Generating checksum..."
+
+	# Now cfgvalidator enters selected mode
 
 	case "$1" in
 			add)
-				#Copy file to $NENDIR/sys/untrusted
-				cp $2 $NENDIR/sys/untrusted/$
+				#Display information in console
+
+
+				
 
 
 }
-echo Functions "gfx", "log_engine", "filecheck", "timer", "nensetup" , "cfgvalidator" loaded
+echo Functions "gfx", "log_engine", "filecheck", "timer", "nensetup", "nenget", and "cfgkeystore" loaded
