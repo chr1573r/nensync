@@ -28,8 +28,7 @@ gfx ()
 	# 
 	# Actions performed by gfx() are also logged depending on $LOGLEVEL
 	local FUNCTIONNAME="gfx()"
-	if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "invoked!" ; fi
-		
+
 	case "$1" in
 
 		ok)
@@ -170,7 +169,6 @@ filecheck ()
 	# Regardless, it will log the outcome
 	# SYNTAX filecheck [FILE]
 	local FUNCTIONNAME="filecheck()"
-	if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "invoked!" ; fi
 	
 		# Checking file
 
@@ -293,7 +291,6 @@ nenget()
 	# e.g "nenget node.cfg $NENDIR/tmp/node.cfg" would download 
 	# the file node.cfg in the homedir of $NODE and save it locally to the tmp directory
 	local FUNCTIONNAME="nenget()"
-	if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "invoked!" ; fi
 
 	echo -e "Downloading file "$BLUE"$1"$DEF" from "$GREEN"$NODE"$DEF"..."
 	if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Downloading file "$1" from $NODE" ; fi
@@ -341,7 +338,6 @@ cfgkeystore ()
 	# cfgkeystore and it's filters are by no means bulletproof, and there are ways to pass "rouge commands" by modifying a cfg file that is sourced.
 	# In other words, you should never connect to nodes you don't trust no matter what!
 	local FUNCTIONNAME="cfgkeystore()"
-	if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "invoked!" ; fi
 
 	PENDINGFILE='$NENDIR/sys/keystore/pending/$NODE_node.cfg'
 	PENDINGSUM='$NENDIR/sys/keystore/pending/$NODE_node.cfg.sum'
