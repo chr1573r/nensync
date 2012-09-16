@@ -20,6 +20,7 @@ echo Declaring functions...
 # We need to load functions fron nenlib.sh:
 source $NENDIR/bin/nenlib.sh
 
+gfx ok
 gfx splash_nensync
 log_engine Start
 
