@@ -59,13 +59,11 @@ do
 	
 	log_engine NewEntry "Starting sync with node $NODE"
 
-	gfx subarrow "Fetching node configuration..."
-	log_engine NewSubEntry "Fetching node configuration..."
-	nenget node.cfg tmp/$NODE_node.cfg
+# ADD CFGKEYSTORE STUFF HERE
 
-	gfx subarrow "Reading node configuration..."
-	log_engine NewSubEntry "Reading node configuration..."
-	source tmp/$NODE_node.cfg
+# IF CFG VALID = 1 stuff:
+gfx subarrow "Applying node configuration..."
+log_engine NewSubEntry "Applying node configuration..."
 
 # Debug
 	echo Debug info
