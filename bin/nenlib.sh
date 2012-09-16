@@ -25,12 +25,15 @@ gfx ()
 	#	Error gfx:
 	#			
 	# "gfx ok" will print "[  OK  ]", while "gfx failed" will print "[FAILED]"
+	# 
+	# Actions performed by gfx() are also logged depending on $LOGLEVEL
 	
 	case "$1" in
 
 		ok)
 			echo -e "                         "$WHITE"[  "$GREEN"OK"$WHITE"  ]$DEF"
 				echo
+				if [ $LOGLEVEL>2 ] then log_engine FunctionLog "Generated gfx:[OK]"; fi
 				;;	
 	
 		failed)
@@ -127,6 +130,15 @@ log_engine ()
                	 		echo "LOGENGINE ERROR, NewSubEntry must be followed by text!" >>$LOGFILE
                	 		else
 				echo "[`/bin/date`] --> $2" >>$LOGFILE
+			fi
+			;;
+
+		FunctionLog)
+        	        	if [ -z "$2" ]
+               	 		then
+               	 		echo "LOGENGINE ERROR, FunctionLog must be followed by text!" >>$LOGFILE
+               	 		else
+				echo "[`/bin/date`][$FunctionName] $2" >>$LOGFILE
 			fi
 			;;
 
