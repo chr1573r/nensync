@@ -27,18 +27,21 @@ gfx ()
 	# "gfx ok" will print "[  OK  ]", while "gfx failed" will print "[FAILED]"
 	# 
 	# Actions performed by gfx() are also logged depending on $LOGLEVEL
-	
+	local FUNCTIONNAME="gfx()"
+	if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "invoked!" ; fi
+		
 	case "$1" in
 
 		ok)
 			echo -e "                         "$WHITE"[  "$GREEN"OK"$WHITE"  ]$DEF"
+				if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: ok" ; fi
 				echo
-				if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Generated gfx:[OK]" ; fi
 				;;	
 			
 		failed)
 		        echo -e "                         "$WHITE"["$RED"FAILED"$WHITE"]$DEF"
-			echo
+		        if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: failed" ; fi
+				echo
 			;;
 		
 		splash_nensync)
@@ -61,6 +64,7 @@ gfx ()
 			echo
 			echo
 			echo -e "$GREEN""          nensync version $APPVERSION"$DEF" - " $BLUE"Nordic Encryption Net"$DEF" (C) "$BLUE"2011-2012"$DEF
+			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: splash_nensync" ; fi
 			sleep 2
 			clear
 			
@@ -68,23 +72,28 @@ gfx ()
 		
 		line)
 			echo -e "$RED------------------------------$DEF"
+			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: line" ; fi
 			;;
 
 		header)
 			clear
 			echo -e "$BLUE""///"$GREEN" $APPNAME "$BLUE"/// "$GREEN"$HOSTNAME"
+			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: header" ; fi
 			echo
 			;;
 		arrow)
 			echo -e "$RED""--""$YELLOW""> ""$DEF""$2"
+			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: arrow" ; fi
 			echo
 			;;
 		subarrow)
 			echo -e "$RED""----""$YELLOW""> ""$DEF""$2"
+			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: subarrow" ; fi
 			;;
 		
 		subspace)
 			echo -e "     $2"
+			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: subspace" ; fi
 			;;
 		
 		*)
@@ -138,7 +147,7 @@ log_engine ()
                	 		then
                	 		echo "LOGENGINE ERROR, FunctionLog must be followed by text!" >>$LOGFILE
                	 		else
-				echo "[`/bin/date`][$FunctionName] $2" >>$LOGFILE
+				echo "[`/bin/date`][$FUNCTIONNAME] $2" >>$LOGFILE
 			fi
 			;;
 
@@ -160,20 +169,20 @@ filecheck ()
 	# If file does exist, the nensync continues
 	# Regardless, it will log the outcome
 	# SYNTAX filecheck [FILE]
+	local FUNCTIONNAME="filecheck()"
+	if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "invoked!" ; fi
 	
 		# Checking file
 
-		log_engine NewEntry "Checking if file "$1" exists.."
+		if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Checking file "$1"... " ; fi
 		if [ -f $1 ];
 			then
-				log_engine NewSubEntry "File "$1" exists!"
+				if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "File "$1" exists!" ; fi
 			else
 				gfx failed
-				log_engine NewSubEntry "FATAL: File "$1" does not found!"
+				log_engine NewSubEntry "FATAL: File "$1" was not found!"
 				echo "FATAL ERROR: Requested file "$1" not found!"
-				echo "NENsync aborted!"
-				echo "If this is the first time you are running nensync,"
-				echo "please run "nensync.sh --setup" to configure nensync"
+				echo "Terminated script"
 			exit
 		fi
 }
@@ -194,6 +203,9 @@ timer()
 	# If called with arguments the first is used as a timer
 	# value and the elapsed time is returned in the form HH:MM:SS.
 	#
+	local FUNCTIONNAME="timer()"
+	if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "invoked!" ; fi
+
     if [[ $# -eq 0 ]]; then
         echo $(date '+%s')
     else
@@ -280,7 +292,11 @@ nenget()
 	# <file> is relative to the node's basedir
 	# e.g "nenget node.cfg $NENDIR/tmp/node.cfg" would download 
 	# the file node.cfg in the homedir of $NODE and save it locally to the tmp directory
+	local FUNCTIONNAME="nenget()"
+	if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "invoked!" ; fi
+
 	echo -e "Downloading file "$BLUE"$1"$DEF" from "$GREEN"$NODE"$DEF"..."
+	if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Downloading file "$1" from $NODE" ; fi
 
 	scp -P $PORT $SYNCUSER@$NODE:$1 $2
 }
@@ -324,6 +340,8 @@ cfgkeystore ()
 	# that could be added to node.cfg with malicious intentions. The filter is described here: http://wiki.bash-hackers.org/howto/conffile
 	# cfgkeystore and it's filters are by no means bulletproof, and there are ways to pass "rouge commands" by modifying a cfg file that is sourced.
 	# In other words, you should never connect to nodes you don't trust no matter what!
+	local FUNCTIONNAME="cfgkeystore()"
+	if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "invoked!" ; fi
 
 	PENDINGFILE='$NENDIR/sys/keystore/pending/$NODE_node.cfg'
 	PENDINGSUM='$NENDIR/sys/keystore/pending/$NODE_node.cfg.sum'
