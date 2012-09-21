@@ -82,12 +82,34 @@ gfx ()
 			;;
 		arrow)
 			echo -e "$RED""--""$YELLOW""> ""$DEF""$2"
+
+			#Temporarily reset colors to avoid weird logging
+			local DEF=""
+			local WHITE=""
+			local BLUE=""
+			local CYAN=""
+			local GREEN=""
+			local RED=""
+			local GRAY=""
+			local YELLOW=""
+
 			log_engine NewEntry "$2"
 			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: arrow" ; fi
 			echo
 			;;
 		subarrow)
 			echo -e "$RED""----""$YELLOW""> ""$DEF""$2"
+			
+			#Temporarily reset colors to avoid weird logging
+			local DEF=""
+			local WHITE=""
+			local BLUE=""
+			local CYAN=""
+			local GREEN=""
+			local RED=""
+			local GRAY=""
+			local YELLOW=""
+
 			log_engine NewSubEntry "$2"
 			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: subarrow" ; fi
 			;;
