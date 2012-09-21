@@ -82,11 +82,13 @@ gfx ()
 			;;
 		arrow)
 			echo -e "$RED""--""$YELLOW""> ""$DEF""$2"
+			log_engine NewEntry "$2"
 			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: arrow" ; fi
 			echo
 			;;
 		subarrow)
 			echo -e "$RED""----""$YELLOW""> ""$DEF""$2"
+			log_engine NewSubEntry "$2"
 			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: subarrow" ; fi
 			;;
 		
