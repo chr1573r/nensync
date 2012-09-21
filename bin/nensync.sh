@@ -26,11 +26,9 @@ log_engine Start
 
 gfx header
 gfx arrow "Initializing Nordic Encrytion Net node sync..."
-log_engine NewEntry "Initalizing Nordic Encryption Net node sync"
 # --- Filecheck
 # We need to make sure necessary files are present
 gfx arrow "Verifying important nen files..."
-log_engine NewSubEntry "Verifying important nen files..."
 gfx subarrow "node.lst"
 filecheck $NENDIR/cfg/node.lst
 log_engine NewSubEntry "Files verified!"
@@ -57,14 +55,11 @@ do
 
 	gfx header
 	gfx arrow "Starting sync with node $GREEN$NODE$DEF:"
-	
-	log_engine NewEntry "Starting sync with node $NODE"
 
 # ADD CFGKEYSTORE STUFF HERE
 
 # IF CFG VALID = 1 stuff:
 gfx subarrow "Applying node configuration..."
-log_engine NewSubEntry "Applying node configuration..."
 
 # Debug
 	echo Debug info
@@ -90,10 +85,8 @@ log_engine NewSubEntry "Applying node configuration..."
 			case "$ENABLED" in
 					N)
 					gfx subarrow "$RED""SYNC ABORTED:$DEF Node online, but is not configured to allow sync."
-					log_engine NewSubEntry "SYNC ABORTED: Node online, but is configured to not accept incoming connections."
 					;;
 				*)
-					log_engine NewSubEntry "Displaying MOTD"
 					gfx subarrow "Displaying message from node"
 					ssh -p $PORT $SYNCUSER@$NODE cat motd.txt 2>/dev/null
 					
@@ -107,7 +100,6 @@ log_engine NewSubEntry "Applying node configuration..."
 					echo
 					gfx arrow "$BLUE""Finished sync with node $NODE.$DEF (`/bin/date`)"
 					gfx line
-					log_engine NewSubEntry "Finished sync with node $NODE."
 					;;
 			esac
 		fi	
