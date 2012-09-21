@@ -131,15 +131,15 @@ log_engine ()
 				then
 					echo "LOGENGINE ERROR, NewEntry must be followed by text!" >>$LOGFILE
 				else
-					#Temporarily reset colors to avoid weird logging
-					local DEF=""
-					local WHITE=""
-					local BLUE=""
-					local CYAN=""
-					local GREEN=""
-					local RED=""
-					local GRAY=""
-					local YELLOW=""
+					#Replace any color codes found in $2 with whitespace
+					local 2=${2/\x1b[0m/ }
+					local 2=${2/\e[0;37m/ }
+					local 2=${2/\x1b[34;01m/ }
+					local 2=${2/\x1b[36;01m/ }
+					local 2=${2/\x1b[32;01m/ }
+					local 2=${2/\x1b[31;01m/ }
+					local 2=${2/\x1b[37;01m/ }
+					local 2=${2/\x1b[33;01m/ }
 					echo "[`/bin/date`] $2" >>$LOGFILE
 				fi
 			;;
@@ -149,15 +149,16 @@ log_engine ()
         		then
                		echo "LOGENGINE ERROR, NewSubEntry must be followed by text!" >>$LOGFILE
                	else
-					#Temporarily reset colors to avoid weird logging
-					local DEF=""
-					local WHITE=""
-					local BLUE=""
-					local CYAN=""
-					local GREEN=""
-					local RED=""
-					local GRAY=""
-					local YELLOW=""
+					#Replace any color codes found in $2 with whitespace
+					local 2=${2/\x1b[0m/ }
+					local 2=${2/\e[0;37m/ }
+					local 2=${2/\x1b[34;01m/ }
+					local 2=${2/\x1b[36;01m/ }
+					local 2=${2/\x1b[32;01m/ }
+					local 2=${2/\x1b[31;01m/ }
+					local 2=${2/\x1b[37;01m/ }
+					local 2=${2/\x1b[33;01m/ }
+
 					echo "[`/bin/date`] --> $2" >>$LOGFILE
 				fi
 			;;
