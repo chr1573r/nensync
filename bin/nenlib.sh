@@ -83,33 +83,12 @@ gfx ()
 		arrow)
 			echo -e "$RED""--""$YELLOW""> ""$DEF""$2"
 
-			#Temporarily reset colors to avoid weird logging
-			local DEF=""
-			local WHITE=""
-			local BLUE=""
-			local CYAN=""
-			local GREEN=""
-			local RED=""
-			local GRAY=""
-			local YELLOW=""
-
 			log_engine NewEntry "$2"
 			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: arrow" ; fi
 			echo
 			;;
 		subarrow)
 			echo -e "$RED""----""$YELLOW""> ""$DEF""$2"
-			
-			#Temporarily reset colors to avoid weird logging
-			local DEF=""
-			local WHITE=""
-			local BLUE=""
-			local CYAN=""
-			local GREEN=""
-			local RED=""
-			local GRAY=""
-			local YELLOW=""
-
 			log_engine NewSubEntry "$2"
 			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: subarrow" ; fi
 			;;
@@ -148,21 +127,39 @@ log_engine ()
 			;;
 
 		NewEntry)
-				if [ -z "$2" ]
+			if [ -z "$2" ]
 				then
-				echo "LOGENGINE ERROR, NewEntry must be followed by text!" >>$LOGFILE
+					echo "LOGENGINE ERROR, NewEntry must be followed by text!" >>$LOGFILE
 				else
-				echo "[`/bin/date`] $2" >>$LOGFILE
+					#Temporarily reset colors to avoid weird logging
+					local DEF=""
+					local WHITE=""
+					local BLUE=""
+					local CYAN=""
+					local GREEN=""
+					local RED=""
+					local GRAY=""
+					local YELLOW=""
+					echo "[`/bin/date`] $2" >>$LOGFILE
 				fi
 			;;
 
 		NewSubEntry)
-        	        	if [ -z "$2" ]
-               	 		then
-               	 		echo "LOGENGINE ERROR, NewSubEntry must be followed by text!" >>$LOGFILE
-               	 		else
-				echo "[`/bin/date`] --> $2" >>$LOGFILE
-			fi
+        	if [ -z "$2" ]
+        		then
+               		echo "LOGENGINE ERROR, NewSubEntry must be followed by text!" >>$LOGFILE
+               	else
+					#Temporarily reset colors to avoid weird logging
+					local DEF=""
+					local WHITE=""
+					local BLUE=""
+					local CYAN=""
+					local GREEN=""
+					local RED=""
+					local GRAY=""
+					local YELLOW=""
+					echo "[`/bin/date`] --> $2" >>$LOGFILE
+				fi
 			;;
 
 		FunctionLog)
