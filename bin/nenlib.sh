@@ -342,10 +342,10 @@ cfgkeystore ()
 	# In other words, you should never connect to nodes you don't trust no matter what!
 	local FUNCTIONNAME="cfgkeystore()"
 
-	PENDINGFILE='$NENDIR/sys/keystore/pending/$NODE_node.cfg'
-	PENDINGSUM='$NENDIR/sys/keystore/pending/$NODE_node.cfg.sum'
-	CLEANEDFILE='$NENDIR/sys/keystore/pending/$NODE_node.cfg_cleaned'
-	SAFEFILE='$NENDIR/tmp/$NODE_node.cfg_safe'
+	PENDINGFILE=$NENDIR/sys/keystore/pending/$NODE_node.cfg
+	PENDINGSUM=$NENDIR/sys/keystore/pending/$NODE_node.cfg.sum
+	CLEANEDFILE=$NENDIR/sys/keystore/pending/$NODE_node.cfg_cleaned
+	SAFEFILE=$NENDIR/tmp/$NODE_node.cfg_safe
 
 	#Display information in console
 	gfx subarrow "Fetching node configuration..."
