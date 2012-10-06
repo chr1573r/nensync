@@ -349,7 +349,6 @@ cfgkeystore ()
 
 		#Display information in console
 	gfx subarrow "Fetching node configuration..."
-	log_engine NewSubEntry "Fetching node configuration..."
 	# Download node.cfg from $NODE and save as set in $PENDINGFILE
 	nenget node.cfg $PENDINGFILE
 
@@ -357,7 +356,6 @@ cfgkeystore ()
 
 	if egrep -q -v '^#|^[^ ]*=[^;]*' "$PENDINGFILE"; then
 		gfx subarrow "Node configuration file seems dirty, cleaning it..."
-		log_engine NewSubEntry "Node configuration file seems dirty, cleaning it..." >&2
 	  # filter the original to a new file
 	  egrep '^#|^[^ ]*=[^;&]*'  "$PENDINGFILE" > "$CLEANEDFILE"
 	  # remove unclean file and rename cleaned file to original name
