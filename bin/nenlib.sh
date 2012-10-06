@@ -120,7 +120,7 @@ log_engine ()
 			echo >>$LOGFILE
 			echo >>$LOGFILE
 			echo "----------------------------------------------------------" >>$LOGFILE
-			echo "$APPNAME version $APPVERSION - Nordic Encryption Net (C) 2011" >>$LOGFILE
+			echo "$APPNAME version $APPVERSION - Nordic Encryption Net (C) 2011-2012" >>$LOGFILE
 			echo >>$LOGFILE
 			echo "This session was invoked  at: `/bin/date`" >>$LOGFILE
 			echo >>$LOGFILE
@@ -345,9 +345,9 @@ cfgkeystore ()
 	PENDINGFILE='$NENDIR/sys/keystore/pending/$NODE_node.cfg'
 	PENDINGSUM='$NENDIR/sys/keystore/pending/$NODE_node.cfg.sum'
 	CLEANEDFILE='$NENDIR/sys/keystore/pending/$NODE_node.cfg_cleaned'
+	SAFEFILE='$NENDIR/tmp/$NODE_node.cfg_safe'
 
-
-		#Display information in console
+	#Display information in console
 	gfx subarrow "Fetching node configuration..."
 	# Download node.cfg from $NODE and save as set in $PENDINGFILE
 	nenget node.cfg $PENDINGFILE
@@ -363,6 +363,10 @@ cfgkeystore ()
 	  mv "$CLEANEDFILE" "$PENDINGFILE"
 	fi
 
+	# Create "safe" version, which basically involves a version injected with "#"
+	# at the beginning of each line
+	sed 's/^/#/' $PENDINGFILE > $SAFEFILE
+
 	# Checksum node.cfg
 	sha512sum "$PENDINGFILE" >> "$PENDINGSUM"
 	gfx subarrow "Generating checksum..."
@@ -372,6 +376,16 @@ cfgkeystore ()
 	case "$1" in
 			add)
 				#Display information in console
+				gfx subarrow "Node configuration unknown, displaying safe version.."
+				gfx subarrow "node.cfg for $NODE - BEGIN"
+				cat $SAFEFILE | more
+				gfx subarrow "node.cfg for $NODE - END"
+				echo "Do you trust this cfg recieved from $NODE? (Y/N)"
+				echo "If yes, the cfg will trusted and you will be able to connect to this node"
+				echo "If no, the cfg will be flagged as untrusted and node will be blocked"
+				sleep 50
+				;;
+	esac
 
 
 				

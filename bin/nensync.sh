@@ -57,6 +57,8 @@ do
 	gfx arrow "Starting sync with node $GREEN$NODE$DEF:"
 
 # ADD CFGKEYSTORE STUFF HERE
+cfgkeystore add #This is a testline
+
 
 # IF CFG VALID = 1 stuff:
 gfx subarrow "Applying node configuration..."
