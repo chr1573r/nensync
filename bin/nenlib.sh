@@ -122,7 +122,7 @@ log_engine ()
 			echo "----------------------------------------------------------" >>$LOGFILE
 			echo "$APPNAME version $APPVERSION - Nordic Encryption Net (C) 2011-2012" >>$LOGFILE
 			echo >>$LOGFILE
-			echo "This session was invoked  at: `/bin/date`" >>$LOGFILE
+			echo "This session was invoked at: `/bin/date`" >>$LOGFILE
 			echo >>$LOGFILE
 			;;
 
