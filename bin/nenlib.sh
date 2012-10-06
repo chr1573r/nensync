@@ -373,6 +373,12 @@ cfgkeystore ()
 
 	# Now cfgvalidator enters selected mode
 
+	#DEBUG
+	echo File: $PENDINGFILE
+	echo Sum: $PENDINGSUM
+	echo Cleaned: $CLEANEDFILE
+	echo Safe: $SAFEFILE
+
 	case "$1" in
 			add)
 				#Display information in console
