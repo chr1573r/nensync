@@ -33,13 +33,13 @@ gfx ()
 
 		ok)
 			echo -e "                         "$WHITE"[  "$GREEN"OK"$WHITE"  ]$DEF"
-				if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: ok" ; fi
+				if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "Rendered: ok" ; fi
 				echo
 				;;	
 			
 		failed)
 		        echo -e "                         "$WHITE"["$RED"FAILED"$WHITE"]$DEF"
-		        if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: failed" ; fi
+		        if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "Rendered: failed" ; fi
 				echo
 			;;
 		
@@ -63,7 +63,7 @@ gfx ()
 			echo
 			echo
 			echo -e "$GREEN""          nensync version $APPVERSION"$DEF" - " $BLUE"Nordic Encryption Net"$DEF" (C) "$BLUE"2011-2012"$DEF
-			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: splash_nensync" ; fi
+			if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "Rendered: splash_nensync" ; fi
 			sleep 2
 			clear
 			
@@ -71,34 +71,34 @@ gfx ()
 		
 		line)
 			echo -e "$RED------------------------------$DEF"
-			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: line" ; fi
+			if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "Rendered: line" ; fi
 			;;
 
 		header)
 			clear
 			echo -e "$BLUE""///"$GREEN" $APPNAME "$BLUE"/// "$GREEN"$HOSTNAME"
-			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: header [$2]" ; fi
+			if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "Rendered: header [$2]" ; fi
 			echo
 			;;
 		arrow)
 			echo -e "$RED""--""$YELLOW""> ""$DEF""$2"
 			log_engine NewEntry "$2"
-			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: arrow [$2]" ; fi
+			if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "Rendered: arrow [$2]" ; fi
 			echo
 			;;
 		subarrow)
 			echo -e "$RED""----""$YELLOW""> ""$DEF""$2"
 			log_engine NewSubEntry "$2"
-			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: subarrow [$2]" ; fi
+			if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "Rendered: subarrow [$2]" ; fi
 			;;
 		fuarrow)
 			echo -e "["$CYAN"$FUNCTIONNAME"$DEF"]"$RED""--""$YELLOW""> ""$DEF""$2""
 			log_engine NewSubEntry "$2"
-			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: fuarrow [$2]" ; fi
+			if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "Rendered: fuarrow [$2]" ; fi
 			;;
 		subspace)
 			echo -e "     $2"
-			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: subspace" ; fi
+			if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "Rendered: subspace" ; fi
 			;;
 		
 		*)
@@ -178,10 +178,10 @@ filecheck ()
 	
 		# Checking file
 
-		if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Checking file "$1"... " ; fi
+		if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "Checking file "$1"... " ; fi
 		if [ -f $1 ];
 			then
-				if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "File "$1" exists!" ; fi
+				if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "File "$1" exists!" ; fi
 			else
 				gfx failed
 				log_engine NewSubEntry "FATAL: File "$1" was not found!"
@@ -208,7 +208,7 @@ timer()
 	# value and the elapsed time is returned in the form HH:MM:SS.
 	#
 	local FUNCTIONNAME="timer()"
-	if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "invoked!" ; fi
+	if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "invoked!" ; fi
 
     if [[ $# -eq 0 ]]; then
         echo $(date '+%s')
@@ -299,7 +299,7 @@ nenget()
 	local FUNCTIONNAME="nenget()"
 
 	echo -e "Downloading file "$BLUE"$1"$DEF" from "$GREEN"$NODE"$DEF"..."
-	if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Downloading file "$1" from $NODE" ; fi
+	if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "Downloading file "$1" from $NODE" ; fi
 
 	scp -P $PORT $SYNCUSER@$NODE:$1 $2
 }
