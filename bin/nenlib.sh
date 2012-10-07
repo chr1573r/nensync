@@ -91,10 +91,11 @@ gfx ()
 			log_engine NewSubEntry "$2"
 			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: subarrow [$2]" ; fi
 			;;
-		fuarrow
+		fuarrow)
 			echo -e "["$CYAN"$FUNCTIONNAME"$DEF"]"$RED""--""$YELLOW""> ""$DEF""$2""
 			log_engine NewSubEntry "$2"
 			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: fuarrow [$2]" ; fi
+			;;
 		subspace)
 			echo -e "     $2"
 			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: subspace" ; fi
