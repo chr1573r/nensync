@@ -77,22 +77,24 @@ gfx ()
 		header)
 			clear
 			echo -e "$BLUE""///"$GREEN" $APPNAME "$BLUE"/// "$GREEN"$HOSTNAME"
-			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: header" ; fi
+			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: header [$2]" ; fi
 			echo
 			;;
 		arrow)
 			echo -e "$RED""--""$YELLOW""> ""$DEF""$2"
-
 			log_engine NewEntry "$2"
-			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: arrow" ; fi
+			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: arrow [$2]" ; fi
 			echo
 			;;
 		subarrow)
 			echo -e "$RED""----""$YELLOW""> ""$DEF""$2"
 			log_engine NewSubEntry "$2"
-			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: subarrow" ; fi
+			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: subarrow [$2]" ; fi
 			;;
-		
+		fuarrow
+			echo -e "["$CYAN"$FUNCTIONNAME"$DEF"]"$RED""--""$YELLOW""> ""$DEF""$2""
+			log_engine NewSubEntry "$2"
+			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: fuarrow [$2]" ; fi
 		subspace)
 			echo -e "     $2"
 			if [ $LOGLEVEL > 2 ] ; then log_engine FunctionLog "Rendered: subspace" ; fi
@@ -311,9 +313,10 @@ cfgkeystore ()
 	# No options are specified when calling the function, as cfgkeystore uses the current values in $NODE, $PORT, $NENDIR
 	# IMPORTANT: If $TRUSTPOLICY is set to 0, cfgkeystore will always trust the node specified and allow the parent script to continue regardless of what the node.cfg file contained.
 	#
-	# SYNTAX: 	cfgkeystore add
+	# SYNTAX: 	cfgkeystore trust
+	#			cfgkeystore untrust
 	#			cfgkeystore remove
-	#			cfgkeystore check
+	#			cfgkeystore validate
 	# 
 	#		
 	# Modes:
@@ -342,10 +345,21 @@ cfgkeystore ()
 	# In other words, you should never connect to nodes you don't trust no matter what!
 	local FUNCTIONNAME="cfgkeystore()"
 
-	PENDINGFILE=$NENDIR/sys/keystore/pending/$NODE.node.cfg
-	PENDINGSUM=$NENDIR/sys/keystore/pending/$NODE.node.cfg.sum
-	CLEANEDFILE=$NENDIR/sys/keystore/pending/$NODE.node.cfg_cleaned
+	KEYSTOREDIR=$NENDIR/sys/keystore/
+
+	# Pending/temp files
+	PENDINGFILE=$KEYSTOREDIR/pending/$NODE.node.cfg
+	PENDINGSUM=$KEYSTOREDIR/pending/$NODE.node.cfg.sum
+	CLEANEDFILE=$KEYSTOREDIR/$NODE.node.cfg_cleaned
 	SAFEFILE=$NENDIR/tmp/$NODE.node.cfg_safe
+
+	# Trusted files
+	TRUSTEDFILE=$KEYSTOREDIR/trusted/$NODE.node.cfg
+	TRUSTEDSUM=$KEYSTOREDIR/trusted/$NODE.node.cfg.sum
+
+	# Untrusted files
+	UNTRUSTEDFILE=$KEYSTOREDIR/untrusted/$NODE.node.cfg
+	UNTRUSTEDSUM=$KEYSTOREDIR/untrusted/$NODE.node.cfg.sum
 
 	#Display information in console
 	gfx subarrow "Fetching node configuration..."
@@ -368,8 +382,9 @@ cfgkeystore ()
 	sed 's/^/#/' $PENDINGFILE > $SAFEFILE
 
 	# Checksum node.cfg
-	sha512sum "$PENDINGFILE" >> "$PENDINGSUM"
 	gfx subarrow "Generating checksum..."
+	sha512sum "$PENDINGFILE" >> "$PENDINGSUM"
+	
 
 	# Now cfgvalidator enters selected mode
 
@@ -381,6 +396,12 @@ cfgkeystore ()
 
 	case "$1" in
 			add)
+				gfx subarrow "Adding $NODE to "trusted""
+				mv $PENDINGFILE $TRUSTEDFILE
+				mv $PENDINGSUM $TRUSTEDSUM
+				;;
+
+			wizard)
 				#Display information in console
 				gfx subarrow "Node configuration unknown, displaying safe version.."
 				gfx subarrow "node.cfg for $NODE - BEGIN"
@@ -393,7 +414,11 @@ cfgkeystore ()
 				;;
 	esac
 
-
+	# Cleaning up
+	rm "$PENDINGFILE"
+	rm "$PENDINGSUM"
+	rm "$CLEANEDFILE"
+	rm "SAFEFILE"
 				
 
 
