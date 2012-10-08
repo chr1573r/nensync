@@ -102,9 +102,9 @@ gfx ()
 			if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "Rendered: subarrow [$2]" ; fi
 			;;
 		fuarrow)
-			echo -e "["$CYAN"$FUNCTIONNAME"$DEF"]"$RED"--"$YELLOW"> "$DEF"$2"
-			log_engine NewSubEntry "$2"
-			if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "Rendered: fuarrow [$2]" ; fi
+			echo -e "$APPNAME"":"$CYAN"$2"$YELLOW"> "$DEF"$3"
+			log_engine NewSubEntry "$3"
+			if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "Rendered: fuarrow for $2 [$3]" ; fi
 			;;
 		subspace)
 			echo -e "     $2"
@@ -394,7 +394,7 @@ cfgkeystore ()
 	UNTRUSTEDSUM=$KEYSTOREDIR/untrusted/$NODE.node.cfg.sum
 
 	#Display information in console
-	gfx subarrow "Fetching node configuration..."
+	gfx fuarrow nenget "Fetching node configuration..."
 	# Download node.cfg from $NODE and save as set in $PENDINGFILE
 	nenget node.cfg $PENDINGFILE
 
@@ -428,23 +428,23 @@ cfgkeystore ()
 
 	case "$1" in
 			trust)
-				gfx fuarrow "Adding $NODE to "trusted"..."
+				gfx fuarrow cfgkeystore "Adding $NODE to "trusted"..."
 				mv $PENDINGFILE $TRUSTEDFILE
 				mv $PENDINGSUM $TRUSTEDSUM
-				gfx fuarrow "$NODE is now trusted."
+				gfx fuarrow cfgkeystore "$NODE is now trusted."
 				;;
 
 			untrust)
-				gfx fuarrow "Adding $NODE to "untrusted"..."
+				gfx fuarrow cfgkeystore "Adding $NODE to "untrusted"..."
 				mv $PENDINGFILE $UNTRUSTEDFILE
 				mv $PENDINGSUM $UNTRUSTEDSUM
-				gfx fuarrow "$NODE is now untrusted."
+				gfx fuarrow cfgkeystore "$NODE is now untrusted."
 				;;
 
 			remove)
-				gfx fuarrow "Removing $NODE..."
+				gfx fuarrow cfgkeystore "Removing $NODE..."
 				rm $TRUSTEDFILE $TRUSTEDSUM $UNTRUSTEDFILE $UNTRUSTEDSUM
-				gfx fuarrow "$NODE removed."
+				gfx fuarrow cfgkeystore "$NODE removed."
 				;;
 
 			check)
@@ -468,10 +468,10 @@ cfgkeystore ()
 	esac
 
 	# Cleaning up
-	rm "$PENDINGFILE"
-	rm "$PENDINGSUM"
-	rm "$CLEANEDFILE"
-	rm "SAFEFILE"
+	rm "$PENDINGFILE">>$LOGFILE
+	rm "$PENDINGSUM">>$LOGFILE
+	rm "$CLEANEDFILE">>$LOGFILE
+	rm "SAFEFILE">>$LOGFILE
 				
 
 
