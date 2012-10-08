@@ -468,10 +468,10 @@ cfgkeystore ()
 	esac
 
 	# Cleaning up
-	rm "$PENDINGFILE" >>$LOGFILE
-	rm "$PENDINGSUM" >>$LOGFILE
-	rm "$CLEANEDFILE" >>$LOGFILE
-	rm "SAFEFILE" >>$LOGFILE
+	rm "$PENDINGFILE" >> $LOGFILE
+	rm "$PENDINGSUM" >> $LOGFILE
+	rm "$CLEANEDFILE" >> $LOGFILE
+	rm "$SAFEFILE" >> $LOGFILE
 				
 
 
