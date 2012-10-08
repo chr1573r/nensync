@@ -432,7 +432,7 @@ cfgkeystore ()
 				mv $PENDINGFILE $TRUSTEDFILE
 				log_engine FunctionLog "Generating checksum..."
 				sha512sum "$TRUSTEDFILE" > "$TRUSTEDSUM"
-				gfx fuarrow cfgkeystore "$NODE is now trusted."
+				log_engine FunctionLog "$NODE is now trusted."
 				;;
 
 			untrust)
@@ -440,7 +440,7 @@ cfgkeystore ()
 				mv $PENDINGFILE $UNTRUSTEDFILE
 				log_engine FunctionLog "Generating checksum..."
 				sha512sum "$UNTRUSTEDFILE" > "$UNTRUSTEDSUM"
-				gfx fuarrow cfgkeystore "$NODE is now untrusted."
+				log_engine FunctionLog  "$NODE is now untrusted."
 				;;
 
 			remove)
