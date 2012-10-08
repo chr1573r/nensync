@@ -394,14 +394,14 @@ cfgkeystore ()
 	UNTRUSTEDSUM=$KEYSTOREDIR/untrusted/$NODE.node.cfg.sum
 
 	#Display information in console
-	gfx fuarrow nenget "Fetching node configuration..."
+	log_engine FunctionLog "Fetching node configuration..."
 	# Download node.cfg from $NODE and save as set in $PENDINGFILE
 	nenget node.cfg $PENDINGFILE
 
 	# Check/Clean $PENDINGFILE
 
 	if egrep -q -v '^#|^[^ ]*=[^;]*' "$PENDINGFILE"; then
-		gfx fuarrow cfgkeystore "Node configuration file seems dirty, cleaning it..."
+		log_engine FunctionLog "Node configuration file seems dirty, cleaning it..."
 	  # filter the original to a new file
 	  egrep '^#|^[^ ]*=[^;&]*'  "$PENDINGFILE" > "$CLEANEDFILE"
 	  # remove unclean file and rename cleaned file to original name
@@ -414,8 +414,8 @@ cfgkeystore ()
 	sed 's/^/#/' $PENDINGFILE > $SAFEFILE
 
 	# Checksum node.cfg
-	gfx fuarrow cfgkeystore "Generating checksum..."
-	sha512sum "$PENDINGFILE" >> "$PENDINGSUM"
+	log_engine FunctionLog "Generating checksum..."
+	sha512sum "$PENDINGFILE" > "$PENDINGSUM"
 	
 
 	# Now cfgvalidator enters selected mode
@@ -428,29 +428,29 @@ cfgkeystore ()
 
 	case "$1" in
 			trust)
-				gfx fuarrow cfgkeystore "Adding $NODE to "trusted"..."
+				log_engine FunctionLog "Adding $NODE to "trusted"..."
 				mv $PENDINGFILE $TRUSTEDFILE
-				gfx fuarrow cfgkeystore "Generating checksum..."
-				sha512sum "$TRUSTEDFILE" >> "$TRUSTEDSUM"
+				log_engine FunctionLog "Generating checksum..."
+				sha512sum "$TRUSTEDFILE" > "$TRUSTEDSUM"
 				gfx fuarrow cfgkeystore "$NODE is now trusted."
 				;;
 
 			untrust)
-				gfx fuarrow cfgkeystore "Adding $NODE to "untrusted"..."
+				log_engine FunctionLog "Adding $NODE to "untrusted"..."
 				mv $PENDINGFILE $UNTRUSTEDFILE
-				gfx fuarrow cfgkeystore "Generating checksum..."
-				sha512sum "$UNTRUSTEDFILE" >> "$UNTRUSTEDSUM"
+				log_engine FunctionLog "Generating checksum..."
+				sha512sum "$UNTRUSTEDFILE" > "$UNTRUSTEDSUM"
 				gfx fuarrow cfgkeystore "$NODE is now untrusted."
 				;;
 
 			remove)
-				gfx fuarrow cfgkeystore "Removing $NODE..."
+				log_engine FunctionLog "Removing $NODE..."
 				rm $TRUSTEDFILE $TRUSTEDSUM $UNTRUSTEDFILE $UNTRUSTEDSUM
-				gfx fuarrow cfgkeystore "$NODE removed."
+				log_engine FunctionLog "$NODE removed."
 				;;
 
 			check)
-				gfx subarrow "Adding $NODE to "trusted""
+				log_engine FunctionLog "Adding $NODE to "trusted""
 				mv $PENDINGFILE $TRUSTEDFILE
 				mv $PENDINGSUM $TRUSTEDSUM
 				;;
