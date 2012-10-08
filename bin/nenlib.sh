@@ -221,7 +221,7 @@ filecheck ()
 		fi
 }
 
-timer()
+timer ()
 {
 	# timer function (http://www.linuxjournal.com/content/use-date-command-measure-elapsed-time)
 	# Elapsed time.  Usage:
@@ -316,7 +316,7 @@ nensetup ()
 		esac	
 }
 
-nenget()
+nenget ()
 {
 	# Function that fetches a single file or directory from a node
 	# Uses variables $NODE $SYNCUSER $PORT and $NENDIR
@@ -457,7 +457,7 @@ cfgkeystore ()
 							if [ $? == 0 ] ; then #If the checksum matches, then..
 								PENDINGSUM=($(sha512sum $PENDINGFILE)) # Get only the hash from $PENDINGFILE and store it in variable
 								TRUSTEDSUM=($(sha512sum $TRUSTEDFILE)) # Get only the hash from $TRUSTEDFILE and store it in variable
-									if [ "$PENDINGSUM" == "$TRUSTEDSUM" ] # Compare the two hashes
+									if [ "$PENDINGSUM" == "$TRUSTEDSUM" ] ; then # Compare the two hashes
 										log_engine FunctionLog "Node cfg matches keystore" #Match!
 										log_engine FunctionLog "Node is trusted for this session"
 										CFGVALID=0
