@@ -3,12 +3,22 @@
 # Pretty colours!
 DEF="\x1b[0m"
 WHITE="\e[0;37m"
+BLACK="\x1b[30;01m"
+LIGHTBLACK="\x1b[30;11m"
 BLUE="\x1b[34;01m"
+LIGHTBLUE="\x1b[34;11m"
 CYAN="\x1b[36;01m"
+LIGHTCYAN="\x1b[36;11m"
+GRAY="\x1b[37;11m"
+LIGHTGRAY="\x1b[37;01m"
 GREEN="\x1b[32;01m"
+LIGHTGREEN="\x1b[32;11m"
+PURPLE="\x1b[35;01m"
+LIGHTPURPLE="\x1b[35;11m"
 RED="\x1b[31;01m"
-GRAY="\x1b[37;01m"
+LIGHTRED="\x1b[31;11m"
 YELLOW="\x1b[33;01m"
+LIGHTYELLOW="\x1b[33;11m"
 
 gfx ()
 {
@@ -100,7 +110,26 @@ gfx ()
 			echo -e "     $2"
 			if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "Rendered: subspace" ; fi
 			;;
-		
+		colourtest)
+			echo Colour test
+			echo -e "$WHITE" WHITE
+			echo -e "$BLACK" BLACK
+			echo -e "$LIGHTBLACK" LIGHTBLACK
+			echo -e "$BLUE" BLUE
+			echo -e "$LIGHTBLUE" LIGHTBLUE
+			echo -e "$CYAN" CYAN
+			echo -e "$LIGHTCYAN" LIGHTCYAN
+			echo -e "$GRAY" GRAY
+			echo -e "$LIGHTGRAY" LIGHTGRAY
+			echo -e "$GREEN" GREEN
+			echo -e "$LIGHTGREEN" LIGHTGREEN
+			echo -e "$PURPLE" PURPLE
+			echo -e "$LIGHTPURPLE" LIGHTPURPLE
+			echo -e "$RED" RED
+			echo -e "$LIGHTRED" LIGHTRED
+			echo -e "$YELLOW" YELLOW
+			echo -e "$LIGHTYELLOW" LIGHTYELLOW
+			;;
 		*)
 			
 	esac
@@ -312,7 +341,8 @@ cfgkeystore ()
 	# node.cfg files are "cleaned" (described below) and stored in the different sub-folders depending on their status.
 	#
 	# No options are specified when calling the function, as cfgkeystore uses the current values in $NODE, $PORT, $NENDIR
-	# IMPORTANT: If $TRUSTPOLICY is set to 0, cfgkeystore will always trust the node specified and allow the parent script to continue regardless of what the node.cfg file contained.
+	# IMPORTANT: If $TRUSTPOLICY is set to 0, cfgkeystore will always trust the node specified
+	# 			 and allow the parent script to continue regardless of what the node.cfg file contained.
 	#
 	# SYNTAX: 	cfgkeystore trust
 	#			cfgkeystore untrust
@@ -346,7 +376,7 @@ cfgkeystore ()
 	# In other words, you should never connect to nodes you don't trust no matter what!
 	local FUNCTIONNAME="cfgkeystore()"
 
-	KEYSTOREDIR=$NENDIR/sys/keystore/
+	KEYSTOREDIR=$NENDIR/sys/keystore
 
 	# Pending/temp files
 	PENDINGFILE=$KEYSTOREDIR/pending/$NODE.node.cfg
