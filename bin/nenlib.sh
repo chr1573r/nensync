@@ -488,7 +488,6 @@ cfgkeystore ()
 						log_engine FunctionLog "Connection denied untill re-added as trusted"
 						CFGVALID=1
 						CKSMSG="Node $NODE flagged as untrustworthy. Connection denied until node is re-added as trusted"
-					fi
 				else
 					log_engine FunctionLog "$NODE not found in keystore"
 					CFGVALID=1
