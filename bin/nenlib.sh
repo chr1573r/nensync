@@ -421,10 +421,10 @@ cfgkeystore ()
 	# Now cfgvalidator enters selected mode
 
 	#DEBUG
-	echo File: $PENDINGFILE
-	echo Sum: $PENDINGSUM
-	echo Cleaned: $CLEANEDFILE
-	echo Safe: $SAFEFILE
+#	echo File: $PENDINGFILE
+#	echo Sum: $PENDINGSUM
+#	echo Cleaned: $CLEANEDFILE
+#	echo Safe: $SAFEFILE
 
 	case "$1" in
 			trust)
@@ -468,10 +468,10 @@ cfgkeystore ()
 	esac
 
 	# Cleaning up
-	rm "$PENDINGFILE">>$LOGFILE
-	rm "$PENDINGSUM">>$LOGFILE
-	rm "$CLEANEDFILE">>$LOGFILE
-	rm "SAFEFILE">>$LOGFILE
+	rm "$PENDINGFILE" >>$LOGFILE
+	rm "$PENDINGSUM" >>$LOGFILE
+	rm "$CLEANEDFILE" >>$LOGFILE
+	rm "SAFEFILE" >>$LOGFILE
 				
 
 
