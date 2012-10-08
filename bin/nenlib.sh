@@ -376,22 +376,22 @@ cfgkeystore ()
 	# cfgkeystore and it's filters are by no means bulletproof, and there are ways to pass "rouge commands" by modifying a cfg file that is sourced.
 	# In other words, you should never connect to nodes you don't trust no matter what!
 	local FUNCTIONNAME="cfgkeystore()"
-
+	log_engine FunctionLog "Session started"
 	KEYSTOREDIR=$NENDIR/sys/keystore
 
 	# Pending/temp files
 	PENDINGFILE=$KEYSTOREDIR/pending/$NODE.node.cfg
-	PENDINGSUM=$KEYSTOREDIR/pending/$NODE.node.cfg.sum
+	PENDINGSUMFILE=$KEYSTOREDIR/pending/$NODE.node.cfg.sum
 	CLEANEDFILE=$KEYSTOREDIR/$NODE.node.cfg_cleaned
 	SAFEFILE=$NENDIR/tmp/$NODE.node.cfg_safe
 
 	# Trusted files
 	TRUSTEDFILE=$KEYSTOREDIR/trusted/$NODE.node.cfg
-	TRUSTEDSUM=$KEYSTOREDIR/trusted/$NODE.node.cfg.sum
+	TRUSTEDSUMFILE=$KEYSTOREDIR/trusted/$NODE.node.cfg.sum
 
 	# Untrusted files
 	UNTRUSTEDFILE=$KEYSTOREDIR/untrusted/$NODE.node.cfg
-	UNTRUSTEDSUM=$KEYSTOREDIR/untrusted/$NODE.node.cfg.sum
+	UNTRUSTEDSUMFILE=$KEYSTOREDIR/untrusted/$NODE.node.cfg.sum
 
 	#Display information in console
 	log_engine FunctionLog "Fetching node configuration..."
@@ -415,14 +415,14 @@ cfgkeystore ()
 
 	# Checksum node.cfg
 	log_engine FunctionLog "Generating checksum..."
-	sha512sum "$PENDINGFILE" > "$PENDINGSUM"
+	sha512sum "$PENDINGFILE" > "$PENDINGSUMFILE"
 	
 
 	# Now cfgvalidator enters selected mode
 
 	#DEBUG
 #	echo File: $PENDINGFILE
-#	echo Sum: $PENDINGSUM
+#	echo Sum: $PENDINGSUMFILE
 #	echo Cleaned: $CLEANEDFILE
 #	echo Safe: $SAFEFILE
 
@@ -431,7 +431,7 @@ cfgkeystore ()
 				log_engine FunctionLog "Adding $NODE to "trusted"..."
 				mv $PENDINGFILE $TRUSTEDFILE
 				log_engine FunctionLog "Generating checksum..."
-				sha512sum "$TRUSTEDFILE" > "$TRUSTEDSUM"
+				sha512sum "$TRUSTEDFILE" > "$TRUSTEDSUMFILE"
 				log_engine FunctionLog "$NODE is now trusted."
 				;;
 
@@ -439,20 +439,61 @@ cfgkeystore ()
 				log_engine FunctionLog "Adding $NODE to "untrusted"..."
 				mv $PENDINGFILE $UNTRUSTEDFILE
 				log_engine FunctionLog "Generating checksum..."
-				sha512sum "$UNTRUSTEDFILE" > "$UNTRUSTEDSUM"
+				sha512sum "$UNTRUSTEDFILE" > "$UNTRUSTEDSUMFILE"
 				log_engine FunctionLog  "$NODE is now untrusted."
 				;;
 
 			remove)
 				log_engine FunctionLog "Removing $NODE..."
-				rm $TRUSTEDFILE $TRUSTEDSUM $UNTRUSTEDFILE $UNTRUSTEDSUM
+				rm $TRUSTEDFILE $TRUSTEDSUMFILE $UNTRUSTEDFILE $UNTRUSTEDSUMFILE
 				log_engine FunctionLog "$NODE removed."
 				;;
 
 			check)
-				log_engine FunctionLog "Adding $NODE to "trusted""
-				mv $PENDINGFILE $TRUSTEDFILE
-				mv $PENDINGSUM $TRUSTEDSUM
+				log_engine FunctionLog "Checking $NODE..."
+				if [ -e $TRUSTEDFILE ] ; then #Check if $TRUSTEDFILE EXISTS
+					if [ -e $TRUSTEDSUMFILE ] ; then #Check if $TRUSTEDSUMFILE EXISTS
+						sha512sum -c --status $TRUSTEDSUMFILE #Checksum the $TRUSTEDFILE against our stored $TRUSTEDSUMFILE
+							if [ $? == 0 ] ; then #If the checksum matches, then..
+								PENDINGSUM=($(sha512sum $PENDINGFILE)) # Get only the hash from $PENDINGFILE and store it in variable
+								TRUSTEDSUM=($(sha512sum $TRUSTEDFILE)) # Get only the hash from $TRUSTEDFILE and store it in variable
+									if [ "$PENDINGSUM" == "$TRUSTEDSUM" ] # Compare the two hashes
+										log_engine FunctionLog "Node cfg matches keystore" #Match!
+										log_engine FunctionLog "Node is trusted for this session"
+										CFGVALID=0
+										CKSMSG="Node $NODE successfully verified"
+									else
+										log_engine FunctionLog "ERROR: Node cfg does NOT match keystore" #Mismatch!
+										log_engine FunctionLog "Node $NODE can not be trusted for this session, cfg received does not match keystore"
+										CFGVALID=1
+										CKSMSG="Node $NODE could not be trusted, cfg received does not match keystore"
+									fi
+							
+							else
+								log_engine FunctionLog "ERROR: Checksum mismatch for $NODE cfg in trusted"
+								log_engine FunctionLog "Node must be re-added to keystore"
+								CFGVALID=1
+								CKSMSG="Node $NODE could not be trusted, checksum mismatch in keystore. Please re-add node"
+							fi
+
+					else
+						log_engine FunctionLog "ERROR: Checksum for $NODE cfg missing"
+						log_engine FunctionLog "Node must be re-added to keystore"
+						CFGVALID=1
+						CKSMSG="Node $NODE could not be trusted, checksumfile missing in keystore. Please re-add node"
+					fi
+
+				elif [ -e $UNTRUSTEDFILE ] ; then #Check if $UNTRUSTEDFILE EXISTS
+						log_engine FunctionLog "Node found in keystore as untrusted"
+						log_engine FunctionLog "Connection denied untill re-added as trusted"
+						CFGVALID=1
+						CKSMSG="Node $NODE flagged as untrustworthy. Connection denied until node is re-added as trusted"
+					fi
+				else
+					log_engine FunctionLog "$NODE not found in keystore"
+					CFGVALID=1
+					CKSMSG="Node ($NODE) not found in keystore. Connction denied until node is added to keystore"
+				fi
 				;;
 
 
@@ -462,7 +503,7 @@ cfgkeystore ()
 				gfx subarrow "node.cfg for $NODE - BEGIN"
 				cat $SAFEFILE | more
 				gfx subarrow "node.cfg for $NODE - END"
-				echo "Do you trust this cfg recieved from $NODE? (Y/N)"
+				echo "Do you trust this cfg received from $NODE? (Y/N)"
 				echo "If yes, the cfg will trusted and you will be able to connect to this node"
 				echo "If no, the cfg will be flagged as untrusted and node will be blocked"
 				sleep 50
@@ -470,12 +511,27 @@ cfgkeystore ()
 	esac
 
 	# Cleaning up
-	rm "$PENDINGFILE" &>> $LOGFILE
-	rm "$PENDINGSUM" &>> $LOGFILE
-	rm "$CLEANEDFILE" &>> $LOGFILE
-	rm "$SAFEFILE" &>> $LOGFILE
+	log_engine FunctionLog "Cleaning up temporary files..."
+	if [ -e $PENDINGFILE ] ; then rm "$PENDINGFILE" ; fi
+	if [ -e $PENDINGSUMFILE ] ; then rm "$PENDINGSUMFILE" ; fi
+	if [ -e $CLEANEDFILE ] ; then rm "$CLEANEDFILE" ; fi
+	if [ -e $SAFEFILE ] ; then rm "$SAFEFILE" ; fi
 				
-
+	# Logging for debug purposes
+	log_engine FunctionLog "Variables used in this session:"
+	log_engine FunctionLog "CLEANEDFILE: $CLEANEDFILE"
+	log_engine FunctionLog "SAFEFILE: $SAFEFILE"
+	log_engine FunctionLog "PENDINGFILE: $PENDINGFILE"
+	log_engine FunctionLog "PENDINGSUMFILE: $PENDINGSUMFILE"
+	log_engine FunctionLog "PENDINGSUM: $PENDINGSUM"
+	log_engine FunctionLog "TRUSTEDFILE: $TRUSTEDFILE"
+	log_engine FunctionLog "TRUSTEDSUMFILE: $TRUSTEDSUMFILE"
+	log_engine FunctionLog "TRUSTEDSUM: $TRUSTEDSUM"
+	log_engine FunctionLog "UNTRUSTEDFILE: $UNTRUSTEDFILE"
+	log_engine FunctionLog "UNTRUSTEDSUMFILE: $UNTRUSTEDSUMFILE"
+	log_engine FunctionLog "CFGVALID: $CFGVALID"
+	log_engine FunctionLog "CKSMSG: $CKSMSG"
+	log_engine FunctionLog "Session ended"
 
 }
 echo Functions "gfx", "log_engine", "filecheck", "timer", "nensetup", "nenget", and "cfgkeystore" loaded
