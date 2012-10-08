@@ -427,11 +427,32 @@ cfgkeystore ()
 	echo Safe: $SAFEFILE
 
 	case "$1" in
-			add)
+			trust)
+				gfx fuarrow "Adding $NODE to "trusted"..."
+				mv $PENDINGFILE $TRUSTEDFILE
+				mv $PENDINGSUM $TRUSTEDSUM
+				gfx fuarrow "$NODE is now trusted."
+				;;
+
+			untrust)
+				gfx fuarrow "Adding $NODE to "untrusted"..."
+				mv $PENDINGFILE $UNTRUSTEDFILE
+				mv $PENDINGSUM $UNTRUSTEDSUM
+				gfx fuarrow "$NODE is now untrusted."
+				;;
+
+			remove)
+				gfx fuarrow "Removing $NODE..."
+				rm $TRUSTEDFILE $TRUSTEDSUM $UNTRUSTEDFILE $UNTRUSTEDSUM
+				gfx fuarrow "$NODE removed."
+				;;
+
+			check)
 				gfx subarrow "Adding $NODE to "trusted""
 				mv $PENDINGFILE $TRUSTEDFILE
 				mv $PENDINGSUM $TRUSTEDSUM
 				;;
+
 
 			wizard)
 				#Display information in console

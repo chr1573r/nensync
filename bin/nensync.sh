@@ -20,7 +20,6 @@ echo Declaring functions...
 # We need to load functions fron nenlib.sh:
 source $NENDIR/bin/nenlib.sh
 
-gfx ok
 gfx splash_nensync
 log_engine Start
 
@@ -57,11 +56,12 @@ do
 	gfx arrow "Starting sync with node $GREEN$NODE$DEF:"
 
 # ADD CFGKEYSTORE STUFF HERE
-cfgkeystore add #This is a testline
+cfgkeystore trust #This is a testline
 
 
 # IF CFG VALID = 1 stuff:
 gfx subarrow "Applying node configuration..."
+source $TRUSTEDFILE
 
 # Debug
 	echo Debug info
