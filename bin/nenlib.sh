@@ -129,7 +129,7 @@ gfx ()
 			echo -e "$LIGHTRED" LIGHTRED
 			echo -e "$YELLOW" YELLOW
 			echo -e "$LIGHTYELLOW" LIGHTYELLOW
-			echo -e "$DF" DEFAULT
+			echo -e "$DEF" DEFAULT
 			;;
 		*)
 			
