@@ -401,7 +401,7 @@ cfgkeystore ()
 	# Check/Clean $PENDINGFILE
 
 	if egrep -q -v '^#|^[^ ]*=[^;]*' "$PENDINGFILE"; then
-		gfx subarrow "Node configuration file seems dirty, cleaning it..."
+		gfx fuarrow cfgkeystore "Node configuration file seems dirty, cleaning it..."
 	  # filter the original to a new file
 	  egrep '^#|^[^ ]*=[^;&]*'  "$PENDINGFILE" > "$CLEANEDFILE"
 	  # remove unclean file and rename cleaned file to original name
@@ -414,7 +414,7 @@ cfgkeystore ()
 	sed 's/^/#/' $PENDINGFILE > $SAFEFILE
 
 	# Checksum node.cfg
-	gfx subarrow "Generating checksum..."
+	gfx fuarrow cfgkeystore "Generating checksum..."
 	sha512sum "$PENDINGFILE" >> "$PENDINGSUM"
 	
 
@@ -430,14 +430,16 @@ cfgkeystore ()
 			trust)
 				gfx fuarrow cfgkeystore "Adding $NODE to "trusted"..."
 				mv $PENDINGFILE $TRUSTEDFILE
-				mv $PENDINGSUM $TRUSTEDSUM
+				gfx fuarrow cfgkeystore "Generating checksum..."
+				sha512sum "$TRUSTEDFILE" >> "$TRUSTEDSUM"
 				gfx fuarrow cfgkeystore "$NODE is now trusted."
 				;;
 
 			untrust)
 				gfx fuarrow cfgkeystore "Adding $NODE to "untrusted"..."
 				mv $PENDINGFILE $UNTRUSTEDFILE
-				mv $PENDINGSUM $UNTRUSTEDSUM
+				gfx fuarrow cfgkeystore "Generating checksum..."
+				sha512sum "$UNTRUSTEDFILE" >> "$UNTRUSTEDSUM"
 				gfx fuarrow cfgkeystore "$NODE is now untrusted."
 				;;
 
