@@ -111,7 +111,7 @@ gfx ()
 			if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "Rendered: subspace" ; fi
 			;;
 		colourtest)
-			echo Colour test
+			echo "#### Colour test"
 			echo -e "$WHITE" WHITE
 			echo -e "$BLACK" BLACK
 			echo -e "$LIGHTBLACK" LIGHTBLACK
@@ -129,6 +129,7 @@ gfx ()
 			echo -e "$LIGHTRED" LIGHTRED
 			echo -e "$YELLOW" YELLOW
 			echo -e "$LIGHTYELLOW" LIGHTYELLOW
+			echo -e "$DF" DEFAULT
 			;;
 		*)
 			
