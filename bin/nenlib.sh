@@ -415,6 +415,8 @@ cfgkeystore ()
 
 	#Display information in console
 	log_engine FunctionLog "Fetching node configuration..."
+	#Erasing any existing file with the same name
+	if [ -e $PENDINGFILE ] ; then rm "$PENDINGFILE" ; fi
 	# Download node.cfg from $NODE and save as set in $PENDINGFILE
 	nenget node.cfg $PENDINGFILE
 
@@ -531,13 +533,13 @@ cfgkeystore ()
 
 	# Cleaning up
 	log_engine FunctionLog "Cleaning up temporary files..."
-	if [ -e $PENDINGFILE ] ; then rm "$PENDINGFILE" ; fi
+	
 	if [ -e $PENDINGSUMFILE ] ; then rm "$PENDINGSUMFILE" ; fi
 	if [ -e $CLEANEDFILE ] ; then rm "$CLEANEDFILE" ; fi
 	if [ -e $SAFEFILE ] ; then rm "$SAFEFILE" ; fi
 	
 	# Bypass if TRUSTPOLICY is disabled:
-	if [ "$TRUSTPOLICY" == 0 ]; then CFGVALID=0 ; CKSMSG="Trustpolicy disabled, keystore bypassed" ; fi
+	if [ "$TRUSTPOLICY" == 0 ]; then CFGVALID=0 ; CKSMSG="Trustpolicy disabled, keystore bypassed" ; else if [ -e $PENDINGFILE ] ; then rm "$PENDINGFILE" ; fi ; fi
 
 	# Logging for debug purposes
 	log_engine FunctionDebug "Variables used in this session:"
