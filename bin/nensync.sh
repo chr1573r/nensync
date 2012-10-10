@@ -103,7 +103,7 @@ do
 		sleep 3
 		clear
 	else
-		gfx subarrow "$RED""SYNC ABORTED:$DEF Node not trusted by keystore:"
+		gfx subarrow "$RED""SYNC ABORTED:$DEF Keystore did not trust node:"
 		gfx subarrow "Keystore errormsg:"
 		echo -e "$CKSMSG"
 	fi
