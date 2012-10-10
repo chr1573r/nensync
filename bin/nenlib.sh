@@ -165,32 +165,47 @@ log_engine ()
 			;;
 
 		NewEntry)
-			if [ -z "$2" ]
-				then
-					echo "LOGENGINE ERROR, NewEntry must be followed by text!" >>$LOGFILE
-				else
-					echo "[`/bin/date`] $2" >>$LOGFILE
-				fi
-			;;
-
-		NewSubEntry)
-        	if [ -z "$2" ]
-        		then
-               		echo "LOGENGINE ERROR, NewSubEntry must be followed by text!" >>$LOGFILE
-               	else
-					echo "[`/bin/date`] --> $2" >>$LOGFILE
-				fi
-			;;
-
-		FunctionLog)
-        	        	if [ -z "$2" ]
-               	 		then
-               	 		echo "LOGENGINE ERROR, FunctionLog must be followed by text!" >>$LOGFILE
-               	 		else
-				echo "[`/bin/date`][$FUNCTIONNAME] $2" >>$LOGFILE
+			if [ -z "$2" ]; then
+				echo "LOGENGINE ERROR, NewEntry must be followed by text!" >>$LOGFILE
+			else
+				echo "[`/bin/date`] $2" >>$LOGFILE
 			fi
 			;;
 
+		NewSubEntry)
+        		if [ -z "$2" ]; then
+           	    	echo "LOGENGINE ERROR, NewSubEntry must be followed by text!" >>$LOGFILE
+          	 	else
+					echo "[`/bin/date`] --> $2" >>$LOGFILE
+				fi
+				;;
+
+		FunctionLog)
+        	        if [ -z "$2" ]; then
+               	 		echo "LOGENGINE ERROR, FunctionLog must be followed by text!" >>$LOGFILE
+               	 	else
+						echo "[`/bin/date`][$FUNCTIONNAME] $2" >>$LOGFILE
+					fi
+					;;
+
+		FunctionDebug)
+				if [ $LOGLEVEL -gt 2 ] ; then
+					if [ -z "$2" ]; then
+               	 		echo "LOGENGINE ERROR, Debug must be followed by text!" >>$LOGFILE
+               	 	else
+						echo "[`/bin/date`][$FUNCTIONNAME-DEBUG] $2" >>$LOGFILE
+					fi
+				fi
+				;;
+		AppDebug)
+				if [ $LOGLEVEL -gt 2 ] ; then
+					if [ -z "$2" ]; then
+               	 		echo "LOGENGINE ERROR, Debug must be followed by text!" >>$LOGFILE
+               	 	else
+						echo "[`/bin/date`][$APPNAME-DEBUG] $2" >>$LOGFILE
+					fi
+				fi
+				;;
 		End)
 				echo "[`/bin/date`] * * * $APPNAME is terminating... * * *" >>$LOGFILE
 			;;
@@ -214,9 +229,9 @@ filecheck ()
 		# Checking file
 
 		if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "Checking file "$1"... " ; fi
-		if [ -f $1 ];
-			then
-				if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "File "$1" exists!" ; fi
+
+		if [ -f $1 ]; then
+			if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "File "$1" exists!" ; fi
 			else
 				gfx failed
 				log_engine NewSubEntry "FATAL: File "$1" was not found!"
@@ -243,7 +258,6 @@ timer ()
 	# value and the elapsed time is returned in the form HH:MM:SS.
 	#
 	local FUNCTIONNAME="timer()"
-	if [ $LOGLEVEL -gt 2 ] ; then log_engine FunctionLog "invoked!" ; fi
 
     if [[ $# -eq 0 ]]; then
         echo $(date '+%s')
@@ -285,19 +299,17 @@ nensetup ()
 				echo "(Please note that this setup will overwrite any existing nensync config!)"
 				echo
 				gfx subarrow "Checking if required software is installed.."
-				if [ -f /usr/bin/rsync ]
-					then
-						echo rsync:
-						gfx ok
-					else
-						errorsdetected="yes"
-						gfx failed
+				if [ -f /usr/bin/rsync ]; then
+					echo rsync:
+					gfx ok
+				else
+					errorsdetected="yes"
+					gfx failed
 				fi
 
-				if [ -f /usr/sbin/sshd ]
-					then
-						echo sshd:
-						gfx ok
+				if [ -f /usr/sbin/sshd ]; then
+					echo sshd:
+					gfx ok
 					else
 						errorsdetected="yes"
 						gfx failed
@@ -522,19 +534,19 @@ cfgkeystore ()
 	if [ -e $SAFEFILE ] ; then rm "$SAFEFILE" ; fi
 				
 	# Logging for debug purposes
-	log_engine FunctionLog "Variables used in this session:"
-	log_engine FunctionLog "CLEANEDFILE: $CLEANEDFILE"
-	log_engine FunctionLog "SAFEFILE: $SAFEFILE"
-	log_engine FunctionLog "PENDINGFILE: $PENDINGFILE"
-	log_engine FunctionLog "PENDINGSUMFILE: $PENDINGSUMFILE"
-	log_engine FunctionLog "PENDINGSUM: $PENDINGSUM"
-	log_engine FunctionLog "TRUSTEDFILE: $TRUSTEDFILE"
-	log_engine FunctionLog "TRUSTEDSUMFILE: $TRUSTEDSUMFILE"
-	log_engine FunctionLog "TRUSTEDSUM: $TRUSTEDSUM"
-	log_engine FunctionLog "UNTRUSTEDFILE: $UNTRUSTEDFILE"
-	log_engine FunctionLog "UNTRUSTEDSUMFILE: $UNTRUSTEDSUMFILE"
-	log_engine FunctionLog "CFGVALID: $CFGVALID"
-	log_engine FunctionLog "CKSMSG: $CKSMSG"
+	log_engine FunctionDebug "Variables used in this session:"
+	log_engine FunctionDebug "CLEANEDFILE: $CLEANEDFILE"
+	log_engine FunctionDebug "SAFEFILE: $SAFEFILE"
+	log_engine FunctionDebug "PENDINGFILE: $PENDINGFILE"
+	log_engine FunctionDebug "PENDINGSUMFILE: $PENDINGSUMFILE"
+	log_engine FunctionDebug "PENDINGSUM: $PENDINGSUM"
+	log_engine FunctionDebug "TRUSTEDFILE: $TRUSTEDFILE"
+	log_engine FunctionDebug "TRUSTEDSUMFILE: $TRUSTEDSUMFILE"
+	log_engine FunctionDebug "TRUSTEDSUM: $TRUSTEDSUM"
+	log_engine FunctionDebug "UNTRUSTEDFILE: $UNTRUSTEDFILE"
+	log_engine FunctionDebug "UNTRUSTEDSUMFILE: $UNTRUSTEDSUMFILE"
+	log_engine FunctionDebug "CFGVALID: $CFGVALID"
+	log_engine FunctionDebug "CKSMSG: $CKSMSG"
 	log_engine FunctionLog "Session ended"
 
 }

@@ -53,25 +53,17 @@ do
 	fi
 
 	gfx header
-	gfx arrow "Starting sync with node $GREEN$NODE$DEF:"
+	gfx arrow "Preparing sync with node $GREEN$NODE$DEF:"
 
-# ADD CFGKEYSTORE STUFF HERE
-cfgkeystore check #This is a testline
+	gfx subarrow "Validating node with keystore..."
+	cfgkeystore check 
+
+	if [ $CFGVALID == 0]; then
+		gfx subarrow "Node validated by keystore"
+		gfx subarrow "Applying node configuration..."
+		source $TRUSTEDFILE
 
 
-# IF CFG VALID = 1 stuff:
-gfx subarrow "Applying node configuration..."
-source $TRUSTEDFILE
-
-# Debug
-	echo Debug info
-	echo "ENABLED: $ENABLED"
-	echo "SPEEDLIMIT: $SPEEDLIMIT"
-	echo "NODEDATADIR: $NODEDATADIR"
-	echo "NODECFG: $NODECFG"
-	echo "NODE: $NODE"
-	echo "PORT: $PORT"
-	sleep 5
 	
 		gfx subarrow "Verifying node configuration..."
 		if [ -z "$NODEDATADIR" ]; then 	# -n tests to see if the argument is non empty
@@ -85,7 +77,7 @@ source $TRUSTEDFILE
 		
 		else 
 			case "$ENABLED" in
-					N)
+				N)
 					gfx subarrow "$RED""SYNC ABORTED:$DEF Node online, but is not configured to allow sync."
 					;;
 				*)
@@ -106,10 +98,24 @@ source $TRUSTEDFILE
 			esac
 		fi	
 
-	echo
-	echo Proceeding to next node...
-	sleep 3
-	clear
+		echo
+		echo Proceeding to next node...
+		sleep 3
+		clear
+	else
+		gfx subarrow "$RED""SYNC ABORTED:$DEF Node not trusted by keystore"
+		gfx subarrow "Keystore errormsg: $CKSMSG"
+	fi
+
+	# Debug
+	log_engine AppDebug "Applied cfg for this session with $NODE"
+	log_engine AppDebug "ENABLED: $ENABLED"
+	log_engine AppDebug "SPEEDLIMIT: $SPEEDLIMIT"
+	log_engine AppDebug "NODEDATADIR: $NODEDATADIR"
+	log_engine AppDebug "NODECFG: $NODECFG"
+	log_engine AppDebug "NODE: $NODE"
+	log_engine AppDebug "PORT: $PORT"
+
 
 done
 gfx line
