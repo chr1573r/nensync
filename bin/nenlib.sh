@@ -159,6 +159,11 @@ log_engine ()
 			echo >>$LOGFILE
 			;;
 
+		LogSize)
+			# Set variable $LOGSIZE as the result of how many lines wc says the logfile contains
+			LOGSIZE=$(wc -l < $LOGFILE)
+			;;
+
 		NewEntry)
 			if [ -z "$2" ]
 				then
