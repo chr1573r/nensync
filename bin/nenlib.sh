@@ -356,29 +356,28 @@ cfgkeystore ()
 	# This function is used to interact with the cfg file keystore located in $NENDIR/keystore/
 	# The keystore directory contains three sub directories, "trusted", "untrusted" and "pending"
 	# cfgkeystore is used to download and verify node.cfg files from nodes before the actual file transfer takes place.
-	# node.cfg files are "cleaned" (described below) and stored in the different sub-folders depending on their status.
+	# node.cfg files are cleaned* and stored in the different sub-folders depending on their status.
 	#
-	# No options are specified when calling the function, as cfgkeystore uses the current values in $NODE, $PORT, $NENDIR
+	# No options are specified when calling the function, cfgkeystore uses the current values in $NODE, $PORT, $NENDIR
 	# IMPORTANT: If $TRUSTPOLICY is set to 0, cfgkeystore will always trust the node specified
 	# 			 and allow the parent script to continue regardless of what the node.cfg file contained.
 	#
 	# SYNTAX: 	cfgkeystore trust
 	#			cfgkeystore untrust
 	#			cfgkeystore remove
-	#			cfgkeystore validate
-	# 
-	#		
+	#			cfgkeystore check
+	#
+	# NOT SUPPORTED:
+	#			cfgkeystore wizard
 	# Modes:
 	#		All modes uses nenget() to download the node.cfg file from the current $NODE and then saves it as $NODE_node.cfg to $NENDIR/sys/keystore/pending.
 	#		A "cleaning filter" (described below) is applied to the file and then a sha512 checksum is generated and stored as $NODE_node.cfg.sum
 	#		Afterwards, the different modes determine further actions:
 	#
-	#		add - The cfg file gets injected with a "#" at the begining of each line and the file is displayed in console.
-	#			  A prompt asks the end-user on the basis of the node.cfg whether this node should be trusted
-	#			  If the user accepts the cfg file, both the cfg file and checksum file is moved from ../pending to ../trusted.
-	#			  If the user declines the cfg file, both the cfg file and checksum file is moved from ../pending to ../untrusted
-	#			  In cases where a host is already stored as trusted/untrusted, cfgkeystore will display both files, and ask to trust/untrust the new file
+	#		trust - cfgkeystore saves node.cfg to ../trusted and generates a new checksum for it
 	#
+	#		untrust - cfgkeystore saves node.cfg to ../untrusted and generates a new checksum for it.
+	#		
 	#		remove - cfgkeystore removes node.cfg/node.cfg.sum for the $NODE from ../trusted and ../untrusted
 	#		
 	#		check - cfgkeystore checks if the current $NODE's node.cfg is stored in the keystore.
@@ -388,10 +387,14 @@ cfgkeystore ()
 	#				Otherwise a warning will be displayed and $CFGVALID is set to 0.
 	#				The host must be added again via cfgkeystore add.
 	#
-	# A "clean" version, means that the cfg file is passed trough a filter which aims to remove command execution attempts
+	# Important!: If a node would be changed from trusted to untrusted or vice versa, you must use "cfgkeystore remove"
+	# 			  and then re-add it using "cfgkeystore trust" or "cfgkeystore untrust"
+	#
+	# *A "clean" version, means that the cfg file is passed trough a filter which aims to remove command execution attempts
 	# that could be added to node.cfg with malicious intentions. The filter is described here: http://wiki.bash-hackers.org/howto/conffile
 	# cfgkeystore and it's filters are by no means bulletproof, and there are ways to pass "rouge commands" by modifying a cfg file that is sourced.
 	# In other words, you should never connect to nodes you don't trust no matter what!
+	
 	local FUNCTIONNAME="cfgkeystore()"
 	log_engine FunctionLog "Session started"
 	KEYSTOREDIR=$NENDIR/sys/keystore
@@ -483,32 +486,32 @@ cfgkeystore ()
 										log_engine FunctionLog "ERROR: Node cfg does NOT match keystore" #Mismatch!
 										log_engine FunctionLog "Node $NODE can not be trusted for this session, cfg received does not match keystore"
 										CFGVALID=1
-										CKSMSG="Node $NODE could not be trusted,\n cfg received does not match keystore"
+										CKSMSG="Cfg recieved from $NODE has changed since the node was added.\nYou must re-confirm that you trust this node"
 									fi
 							
 							else
 								log_engine FunctionLog "ERROR: Checksum mismatch for $NODE cfg in trusted"
 								log_engine FunctionLog "Node must be re-added to keystore"
 								CFGVALID=1
-								CKSMSG="Node $NODE could not be trusted, checksum mismatch in keystore.\n Please re-add node"
+								CKSMSG="Mismatch between stored cfg and stored checksum\nYou must re-confirm that you trust this node"
 							fi
 
 					else
 						log_engine FunctionLog "ERROR: Checksum for $NODE cfg missing"
 						log_engine FunctionLog "Node must be re-added to keystore"
 						CFGVALID=1
-						CKSMSG="Node $NODE could not be trusted, checksumfile missing in keystore.\n Please re-add node"
+						CKSMSG="Checksumfile missing in keystore, validation can not continue.\nYou must re-confirm that you trust this node"
 					fi
 
 				elif [ -e $UNTRUSTEDFILE ] ; then #Check if $UNTRUSTEDFILE EXISTS
 						log_engine FunctionLog "Node found in keystore as untrusted"
 						log_engine FunctionLog "Connection denied untill re-added as trusted"
 						CFGVALID=1
-						CKSMSG="Node $NODE flagged as untrustworthy.\n Connection denied until node is re-added as trusted"
+						CKSMSG="Node flagged as untrustworthy in keystore.\nAccess denied until node is re-confirmed as trusted"
 				else
 					log_engine FunctionLog "$NODE not found in keystore"
 					CFGVALID=1
-					CKSMSG="Node ($NODE) not found in keystore.\n Connection denied until node is added to keystore"
+					CKSMSG="Node not found in keystore.\nAccess denied until node is added as trusted to keystore"
 				fi
 				;;
 
@@ -532,7 +535,10 @@ cfgkeystore ()
 	if [ -e $PENDINGSUMFILE ] ; then rm "$PENDINGSUMFILE" ; fi
 	if [ -e $CLEANEDFILE ] ; then rm "$CLEANEDFILE" ; fi
 	if [ -e $SAFEFILE ] ; then rm "$SAFEFILE" ; fi
-				
+	
+	# Bypass if TRUSTPOLICY is disabled:
+	if [ "$TRUSTPOLICY" == 0 ]; then CFGVALID=0 ; CKSMSG="Trustpolicy disabled, keystore bypassed" ; fi
+
 	# Logging for debug purposes
 	log_engine FunctionDebug "Variables used in this session:"
 	log_engine FunctionDebug "CLEANEDFILE: $CLEANEDFILE"
@@ -545,6 +551,7 @@ cfgkeystore ()
 	log_engine FunctionDebug "TRUSTEDSUM: $TRUSTEDSUM"
 	log_engine FunctionDebug "UNTRUSTEDFILE: $UNTRUSTEDFILE"
 	log_engine FunctionDebug "UNTRUSTEDSUMFILE: $UNTRUSTEDSUMFILE"
+	log_engine FunctionDebug "TRUSTPOLICY: $TRUSTPOLICY"
 	log_engine FunctionDebug "CFGVALID: $CFGVALID"
 	log_engine FunctionDebug "CKSMSG: $CKSMSG"
 	log_engine FunctionLog "Session ended"
