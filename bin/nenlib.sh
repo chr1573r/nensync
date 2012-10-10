@@ -483,32 +483,32 @@ cfgkeystore ()
 										log_engine FunctionLog "ERROR: Node cfg does NOT match keystore" #Mismatch!
 										log_engine FunctionLog "Node $NODE can not be trusted for this session, cfg received does not match keystore"
 										CFGVALID=1
-										CKSMSG="Node $NODE could not be trusted, cfg received does not match keystore"
+										CKSMSG="Node $NODE could not be trusted,'\n' cfg received does not match keystore"
 									fi
 							
 							else
 								log_engine FunctionLog "ERROR: Checksum mismatch for $NODE cfg in trusted"
 								log_engine FunctionLog "Node must be re-added to keystore"
 								CFGVALID=1
-								CKSMSG="Node $NODE could not be trusted, checksum mismatch in keystore. Please re-add node"
+								CKSMSG="Node $NODE could not be trusted, checksum mismatch in keystore.'\n' Please re-add node"
 							fi
 
 					else
 						log_engine FunctionLog "ERROR: Checksum for $NODE cfg missing"
 						log_engine FunctionLog "Node must be re-added to keystore"
 						CFGVALID=1
-						CKSMSG="Node $NODE could not be trusted, checksumfile missing in keystore. Please re-add node"
+						CKSMSG="Node $NODE could not be trusted, checksumfile missing in keystore.'\n' Please re-add node"
 					fi
 
 				elif [ -e $UNTRUSTEDFILE ] ; then #Check if $UNTRUSTEDFILE EXISTS
 						log_engine FunctionLog "Node found in keystore as untrusted"
 						log_engine FunctionLog "Connection denied untill re-added as trusted"
 						CFGVALID=1
-						CKSMSG="Node $NODE flagged as untrustworthy. Connection denied until node is re-added as trusted"
+						CKSMSG="Node $NODE flagged as untrustworthy.'\n' Connection denied until node is re-added as trusted"
 				else
 					log_engine FunctionLog "$NODE not found in keystore"
 					CFGVALID=1
-					CKSMSG="Node ($NODE) not found in keystore. Connction denied until node is added to keystore"
+					CKSMSG="Node ($NODE) not found in keystore.'\n' Connection denied until node is added to keystore"
 				fi
 				;;
 

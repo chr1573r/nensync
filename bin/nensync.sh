@@ -58,7 +58,7 @@ do
 	gfx subarrow "Validating node with keystore..."
 	cfgkeystore check 
 
-	if [ $CFGVALID == 0]; then
+	if [ $CFGVALID == 0 ]; then
 		gfx subarrow "Node validated by keystore"
 		gfx subarrow "Applying node configuration..."
 		source $TRUSTEDFILE
@@ -103,8 +103,9 @@ do
 		sleep 3
 		clear
 	else
-		gfx subarrow "$RED""SYNC ABORTED:$DEF Node not trusted by keystore"
-		gfx subarrow "Keystore errormsg: $CKSMSG"
+		gfx subarrow "$RED""SYNC ABORTED:$DEF Node not trusted by keystore:"
+		gfx subarrow "Keystore errormsg:"
+		echo -e "$CKSMSG"
 	fi
 
 	# Debug
