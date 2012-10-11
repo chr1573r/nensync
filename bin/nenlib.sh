@@ -441,13 +441,6 @@ cfgkeystore ()
 	
 
 	# Now cfgvalidator enters selected mode
-
-	#DEBUG
-#	echo File: $PENDINGFILE
-#	echo Sum: $PENDINGSUMFILE
-#	echo Cleaned: $CLEANEDFILE
-#	echo Safe: $SAFEFILE
-
 	case "$1" in
 			trust)
 				log_engine FunctionLog "Adding $NODE to "trusted"..."
@@ -539,7 +532,7 @@ cfgkeystore ()
 	if [ -e $SAFEFILE ] ; then rm "$SAFEFILE" ; fi
 	
 	# Bypass if TRUSTPOLICY is disabled:
-	if [ "$TRUSTPOLICY" == 0 ]; then CFGVALID=0 ; CKSMSG="Trustpolicy disabled, keystore bypassed" ; else if [ -e $PENDINGFILE ] ; then rm "$PENDINGFILE" ; fi ; fi
+	if [ "$TRUSTPOLICY" == 0 ]; then CFGVALID=0 ; CKSMSG="Trustpolicy disabled, keystore bypassed" ; TRUSTEDFILE=$PENDINGFILE ; else if [ -e $PENDINGFILE ] ; then rm "$PENDINGFILE" ; fi ; fi
 
 	# Logging for debug purposes
 	log_engine FunctionDebug "Variables used in this session:"
