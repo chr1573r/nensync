@@ -87,7 +87,7 @@ do
 					echo
 					gfx subarrow "Syncing..."
 					echo "Sync started `/bin/date`"
-					log_engine NewSubEntry "Initiating rsync: rsync -avzh --progress --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $SYNCUSER@$NODE:$NODEDATADIR/ $DATADIR"
+					log_engine NewSubEntry "Initiating rsync: rsync -avz --progress --bwlimit=$SPEEDLIMIT -e ""ssh -p $PORT"" $SYNCUSER@$NODE:$NODEDATADIR/ $DATADIR"
 				
 					# For more info on this implementation, check out http://unix.stackexchange.com/questions/44860/making-a-progressbar-with-dialog-from-rsync-output
 					rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $SYNCUSER@$NODE:$NODEDATADIR $DATADIR | awk -f $NENDIR/sys/rsync.awk | sed --unbuffered 's/([0-9]*).*/\1/' | dialog --title "nensync" --gauge "Syncing with $NODE" 20 70
