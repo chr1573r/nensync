@@ -338,9 +338,12 @@ nensetup ()
 
 syncgauge()
 {
-awk -f $NENDIR/sys/rsync.awk $2 | \ # Apply awk filter to get rsync output in numbers
-sed --unbuffered 's/\([0-9]*\).*/\1/' | \ # Apply sed filter to get rid of decimals
-dialog --backtitle $APPNAME --title "$SYNCTITLE" --gauge "$SYNCTEXT" 20 70 # Display a gauge showing percentage
+# Apply awk filter to get rsync output in numbers
+awk -f $NENDIR/sys/rsync.awk $2 | \
+# Apply sed filter to get rid of decimals
+sed --unbuffered 's/\([0-9]*\).*/\1/' | \
+dialog --backtitle $APPNAME --title "$SYNCTITLE" --gauge "$SYNCTEXT" 20 70 
+# Display a gauge showing percentage
 }
 
 
