@@ -20,6 +20,9 @@ LIGHTRED="\x1b[31;11m"
 YELLOW="\x1b[33;01m"
 LIGHTYELLOW="\x1b[33;11m"
 
+# DialogRC support
+DIALOGRC=$NENDIR/sys/dialogrc
+
 gfx ()
 {
 	# This function provides "[  OK  ]" and "[FAILED]" text output (followed by a line break)
@@ -332,6 +335,15 @@ nensetup ()
 				nensetup
 		esac	
 }
+
+syncgauge()
+{
+awk -f $NENDIR/sys/rsync.awk $2 | \ # Apply awk filter to get rsync output in numbers
+sed --unbuffered 's/\([0-9]*\).*/\1/' | \ # Apply sed filter to get rid of decimals
+dialog --backtitle $APPNAME --title "$SYNCTITLE" --gauge "$SYNCTEXT" 20 70 # Display a gauge showing percentage
+}
+
+
 
 nenget ()
 {
