@@ -10,18 +10,8 @@
 # String     -  "string"
 # Boolean    -  <ON|OFF>
 # Attribute  -  (foreground,background,highlight?)
+#
 
-# Set aspect-ration.
-aspect = 0
-
-# Set separator (for multiple widgets output).
-separate_widget = ""
-
-# Set tab-length (for textbox tab-conversion).
-tab_len = 0
-
-# Make tab-traversal for checklist, etc., include the list.
-visit_items = OFF
 
 # Shadow dialog boxes? This also turns on color.
 use_shadow = ON
@@ -30,22 +20,22 @@ use_shadow = ON
 use_colors = ON
 
 # Screen color
-screen_color = (CYAN,GREEN,ON)
+screen_color = (GREEN,BLACK,ON)
 
 # Shadow color
-shadow_color = (BLACK,BLACK,ON)
+shadow_color = (BLACK,BLACK,OFF)
 
 # Dialog box color
 dialog_color = (BLACK,WHITE,OFF)
 
 # Dialog box title color
-title_color = (BLUE,WHITE,ON)
+title_color = (YELLOW,WHITE,ON)
 
 # Dialog box border color
-border_color = (WHITE,WHITE,ON)
+border_color = (BLACK,WHITE,OFF)
 
 # Active button color
-button_active_color = (WHITE,BLUE,ON)
+button_active_color = (WHITE,YELLOW,ON)
 
 # Inactive button color
 button_inactive_color = (BLACK,WHITE,OFF)
@@ -63,28 +53,28 @@ button_label_active_color = (YELLOW,BLUE,ON)
 button_label_inactive_color = (BLACK,WHITE,ON)
 
 # Input box color
-inputbox_color = (BLACK,WHITE,OFF)
+inputbox_color = (BLACK,CYAN,OFF)
 
 # Input box border color
-inputbox_border_color = (BLACK,WHITE,OFF)
+inputbox_border_color = (WHITE,WHITE,OFF)
 
 # Search box color
-searchbox_color = (BLACK,WHITE,OFF)
+searchbox_color = (BLACK,CYAN,OFF)
 
 # Search box title color
 searchbox_title_color = (BLUE,WHITE,ON)
 
 # Search box border color
-searchbox_border_color = (WHITE,WHITE,ON)
+searchbox_border_color = (WHITE,WHITE,OFF)
 
 # File position indicator color
 position_indicator_color = (BLUE,WHITE,ON)
 
 # Menu box color
-menubox_color = (BLACK,WHITE,OFF)
+menubox_color = (WHITE,WHITE,OFF)
 
 # Menu box border color
-menubox_border_color = (WHITE,WHITE,ON)
+menubox_border_color = (WHITE,WHITE,OFF)
 
 # Item color
 item_color = (BLACK,WHITE,OFF)
@@ -99,10 +89,10 @@ tag_color = (BLUE,WHITE,ON)
 tag_selected_color = (YELLOW,BLUE,ON)
 
 # Tag key color
-tag_key_color = (RED,WHITE,OFF)
+tag_key_color = (YELLOW,WHITE,ON)
 
 # Selected tag key color
-tag_key_selected_color = (RED,BLUE,ON)
+tag_key_selected_color = (WHITE,BLUE,ON)
 
 # Check box color
 check_color = (BLACK,WHITE,OFF)
@@ -119,11 +109,4 @@ darrow_color = (GREEN,WHITE,ON)
 # Item help-text color
 itemhelp_color = (WHITE,BLACK,OFF)
 
-# Active form text color
-form_active_text_color = (WHITE,BLUE,ON)
 
-# Form text color
-form_text_color = (WHITE,CYAN,ON)
-
-# Readonly form item color
-form_item_readonly_color = (CYAN,WHITE,ON)

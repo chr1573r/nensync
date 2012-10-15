@@ -21,7 +21,7 @@ YELLOW="\x1b[33;01m"
 LIGHTYELLOW="\x1b[33;11m"
 
 # DialogRC support
-DIALOGRC=$NENDIR/sys/dialogrc
+DIALOGRC=$NENDIR/cfg/dialog
 
 gfx ()
 {
