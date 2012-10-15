@@ -119,6 +119,7 @@ do
 	log_engine AppDebug "NODECFG: $NODECFG"
 	log_engine AppDebug "NODE: $NODE"
 	log_engine AppDebug "PORT: $PORT"
+	log_engine AppDebug "DIALOGRC: $DIALOGRC"
 
 
 done
