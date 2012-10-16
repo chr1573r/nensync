@@ -339,7 +339,7 @@ syncgauge()
 awk -f $NENDIR/sys/rsync.awk $2 | \
 # Apply sed filter to get rid of decimals
 sed --unbuffered 's/\([0-9]*\).*/\1/' | \
-dialog --backtitle "\Zb\Z1Hi \Z5there" --title "$SYNCTITLE" --gauge "$SYNCTEXT" 7 70 
+dialog --backtitle "$SYNCBACKTITLE" --title "$SYNCTITLE" --gauge "$SYNCTEXT" 7 70 
 # Display a gauge showing percentage
 }
 
