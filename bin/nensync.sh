@@ -89,11 +89,17 @@ do
 					echo "Sync started `/bin/date`"
 					log_engine NewSubEntry "Initiating rsync: rsync -avz --progress --bwlimit=$SPEEDLIMIT -e ""ssh -p $PORT"" $SYNCUSER@$NODE:$NODEDATADIR/ $DATADIR"
 				
-					# For more info on this implementation, check out http://unix.stackexchange.com/questions/44860/making-a-progressbar-with-dialog-from-rsync-output
-					SYNCBACKTITLE="/// nensync /// $NODE"
-					SYNCTITLE="Synchronizing with $NODE"
-					SYNCTEXT="Sync started `/bin/date`\nCurrent progress:"
-					rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $SYNCUSER@$NODE:$NODEDATADIR $DATADIR | syncgauge
+					if [ "$SYNCVERBOSITY" == 0 ]; then
+						# For more info on this implementation, check out http://unix.stackexchange.com/questions/44860/making-a-progressbar-with-dialog-from-rsync-output
+						SYNCBACKTITLE="/// nensync /// $NODE"
+						SYNCTITLE="Synchronizing with $NODE"
+						SYNCTEXT="Sync started `/bin/date`\nCurrent progress:"
+						log_engine NewSubEntry Displaying progressbar in console
+						rsync -avz --progress --log-file=$NENDIR/sys/rsync.log --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $SYNCUSER@$NODE:$NODEDATADIR $DATADIR | syncgauge
+					else
+						log_engine NewSubEntry Displaying rsync output in console
+						rsync -avz --progress --log-file=$NENDIR/sys/rsync.log --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $SYNCUSER@$NODE:$NODEDATADIR $DATADIR
+					fi
 				
 					echo
 					gfx arrow "$BLUE""Finished sync with node $NODE.$DEF (`/bin/date`)"
@@ -120,7 +126,9 @@ do
 	log_engine AppDebug "NODECFG: $NODECFG"
 	log_engine AppDebug "NODE: $NODE"
 	log_engine AppDebug "PORT: $PORT"
-	log_engine AppDebug "DIALOGRC: $DIALOGRC"
+	log_engine AppDebug "SYNCVERBOSITY: $SYNCVERBOSITY"
+	log_engine AppDebug "SYNCBACKTITLE: $SYNCBACKTITLE"
+	log_engine AppDebug "SYNCTEXT: $SYNCTEXT"
 
 
 done
