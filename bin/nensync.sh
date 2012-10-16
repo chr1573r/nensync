@@ -90,6 +90,7 @@ do
 					log_engine NewSubEntry "Initiating rsync: rsync -avz --progress --bwlimit=$SPEEDLIMIT -e ""ssh -p $PORT"" $SYNCUSER@$NODE:$NODEDATADIR/ $DATADIR"
 				
 					# For more info on this implementation, check out http://unix.stackexchange.com/questions/44860/making-a-progressbar-with-dialog-from-rsync-output
+					SYNCBACKTITLE="\Z4///\Z2 nensync \Z4///\Z2 mayuri.cjnet.lan\ZB"
 					SYNCTITLE="Synchronizing with $NODE"
 					SYNCTEXT="Sync started `/bin/date`\nCurrent progress:"
 					rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $SYNCUSER@$NODE:$NODEDATADIR $DATADIR | syncgauge
