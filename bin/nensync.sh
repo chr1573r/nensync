@@ -91,7 +91,7 @@ do
 				
 					# For more info on this implementation, check out http://unix.stackexchange.com/questions/44860/making-a-progressbar-with-dialog-from-rsync-output
 					SYNCTITLE="Synchronizing with $NODE"
-					SYNCTEXT="Current progress:"
+					SYNCTEXT="Sync started `/bin/date`\nCurrent progress:"
 					rsync -avz --progress --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $SYNCUSER@$NODE:$NODEDATADIR $DATADIR | syncgauge
 				
 					echo
