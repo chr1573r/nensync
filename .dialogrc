@@ -26,13 +26,13 @@ screen_color = (GREEN,BLACK,ON)
 shadow_color = (BLACK,BLACK,OFF)
 
 # Dialog box color
-dialog_color = (BLACK,WHITE,OFF)
+dialog_color = (WHITE,BLACK,OFF)
 
 # Dialog box title color
-title_color = (YELLOW,WHITE,ON)
+title_color = (YELLOW,BLACK,ON)
 
 # Dialog box border color
-border_color = (BLACK,WHITE,OFF)
+border_color = (WHITE,BLACK,OFF)
 
 # Active button color
 button_active_color = (WHITE,YELLOW,ON)
