@@ -33,7 +33,7 @@ echo "Updating nendex...(datadir: $DATADIR)"
 echo
 echo -e "["$YELLOW"nendex"$DEF"] initialized at `date '+%d.%m.%Y, %H:%M'`"
 # for each file found in .data that is not empty or a directory, do:
-find $DATDIR -not -empty -type f -print0 | xargs -0 ls | while read CURRENTFILE;
+find $DATADIR -not -empty -type f -print0 | xargs -0 ls | while read CURRENTFILE;
 do
 	# Tell which file is currently being hashed to console (STDOUT)
 	echo -e "["$YELLOW"nendex "$GREEN"#"$DEF" `date '+%H:%M'`] Currently processing file "$CYAN"$CURRENTFILE"$DEF"..."
