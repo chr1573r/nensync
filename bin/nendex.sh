@@ -1,6 +1,11 @@
 #!/bin/bash
 
 # nendex.sh
+
+# For future reference:
+# awk '{$1=""; print $0}'
+# Can be used to get everything but the sum for a nendex line
+
 # Creates a file index and calculates the SHA512 of each file in the nen data directory
 APPVERSION="1.2.0"
 
