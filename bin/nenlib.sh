@@ -20,6 +20,7 @@ RED="\x1b[31;11m"
 LIGHTYELLOW="\x1b[33;01m"
 YELLOW="\x1b[33;11m"
 
+trap "{ reset; clear;echo $APPNAME $APPVERSION terminated at `date`; exit; }" SIGINT SIGTERM EXIT # Set trap for catching Ctrl-C and kills, so we can reset terminal upon exit
 
 gfx ()
 {
