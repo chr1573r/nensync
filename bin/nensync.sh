@@ -95,6 +95,7 @@ do
 						SYNCTITLE="Synchronizing with $NODE"
 						SYNCTEXT="Sync started `/bin/date`\nCurrent progress:"
 						log_engine NewSubEntry Displaying progressbar in console
+						reset
 						rsync -avz --progress --log-file=$NENDIR/sys/rsync.log --bwlimit=$SPEEDLIMIT -e "ssh -p $PORT" $SYNCUSER@$NODE:$NODEDATADIR $DATADIR | syncgauge
 					else
 						log_engine NewSubEntry Displaying rsync output in console
