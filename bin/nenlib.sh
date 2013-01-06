@@ -1,24 +1,25 @@
 #!/bin/bash
 
-# Pretty colours!
+# Pretty colors!
 DEF="\x1b[0m"
 WHITE="\e[0;37m"
-BLACK="\x1b[30;01m"
-LIGHTBLACK="\x1b[30;11m"
-BLUE="\x1b[34;01m"
-LIGHTBLUE="\x1b[34;11m"
-CYAN="\x1b[36;01m"
-LIGHTCYAN="\x1b[36;11m"
-GRAY="\x1b[37;11m"
+LIGHTBLACK="\x1b[30;01m"
+BLACK="\x1b[30;11m"
+LIGHTBLUE="\x1b[34;01m"
+BLUE="\x1b[34;11m"
+LIGHTCYAN="\x1b[36;01m"
+CYAN="\x1b[36;11m"
 LIGHTGRAY="\x1b[37;01m"
-GREEN="\x1b[32;01m"
-LIGHTGREEN="\x1b[32;11m"
-PURPLE="\x1b[35;01m"
-LIGHTPURPLE="\x1b[35;11m"
-RED="\x1b[31;01m"
-LIGHTRED="\x1b[31;11m"
-YELLOW="\x1b[33;01m"
-LIGHTYELLOW="\x1b[33;11m"
+GRAY="\x1b[37;11m"
+LIGHTGREEN="\x1b[32;01m"
+GREEN="\x1b[32;11m"
+LIGHTPURPLE="\x1b[35;01m"
+PURPLE="\x1b[35;11m"
+LIGHTRED="\x1b[31;01m"
+RED="\x1b[31;11m"
+LIGHTYELLOW="\x1b[33;01m"
+YELLOW="\x1b[33;11m"
+
 
 gfx ()
 {
