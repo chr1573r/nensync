@@ -86,7 +86,7 @@ do
 					
 					echo
 					gfx subarrow "Syncing..."
-					echo "Sync started `/bin/date`"
+					echo -e "Sync started `/bin/date`"$DEF""
 					log_engine NewSubEntry "Initiating rsync: rsync -avz --progress --bwlimit=$SPEEDLIMIT -e ""ssh -p $PORT"" $SYNCUSER@$NODE:$NODEDATADIR/ $DATADIR"
 				
 					if [ "$SYNCVERBOSITY" == 0 ]; then
